@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -7,7 +7,20 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>Hello !</h1>
-    <p>Welcome to <span th:text="${appName}">Our App</span></p>
+    Locations:
+    <th:ul th:each="location : ${locations}">
+      <li th:text="${location.getName()}"></li>
+    </th:ul>
+    <br /><br /><br />
+    Jobs:
+    <th:ul th:each="job : ${jobs}">
+      <li th:text="${job.getName()}"></li>
+    </th:ul>
+    <br /><br /><br />
+    Employees:
+    <th:ul th:each="employee : ${employees}">
+      <li th:text="${employee.getName()}"></li>
+    </th:ul>
+    <br /><br /><br />
   </body>
 </html>
