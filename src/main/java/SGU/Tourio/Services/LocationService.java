@@ -23,7 +23,7 @@ public class LocationService {
 
     public Location get(long id) {
         Optional<Location> location = locationRepository.findById(id);
-        return location.isPresent() ? location.get() : null;
+        return location.orElse(null);
     }
 
     public Location create(Location location) throws EntityExistsException {

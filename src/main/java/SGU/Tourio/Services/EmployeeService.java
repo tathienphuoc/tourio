@@ -23,7 +23,7 @@ public class EmployeeService {
 
     public Employee get(long id) {
         Optional<Employee> employee = employeeRepository.findById(id);
-        return employee.isPresent() ? employee.get() : null;
+        return employee.orElse(null);
     }
 
     public Employee create(Employee employee) throws EntityExistsException {

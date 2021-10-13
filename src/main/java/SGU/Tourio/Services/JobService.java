@@ -23,7 +23,7 @@ public class JobService {
 
     public Job get(long id) {
         Optional<Job> job = jobRepository.findById(id);
-        return job.isPresent() ? job.get() : null;
+        return job.orElse(null);
     }
 
     public Job create(Job job) throws EntityExistsException {
