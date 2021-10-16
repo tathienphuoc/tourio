@@ -21,16 +21,17 @@ public class LocationService {
         return locationRepository.findAll();
     }
 
-    public Location get(long id) {
+    public Location get(Long id) {
+        if(id ==null) return null;
         Optional<Location> location = locationRepository.findById(id);
         return location.orElse(null);
     }
 
     public Location create(Location location) throws EntityExistsException {
-        Location isExist = get(location.getId());
-        if (isExist != null) {
-            throw new EntityExistsException("Existed");
-        }
+        // Location isExist = get(location.getId());
+        // if (isExist != null) {
+        //     throw new EntityExistsException("Existed");
+        // }
         return locationRepository.save(location);
     }
 

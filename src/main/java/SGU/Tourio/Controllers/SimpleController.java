@@ -32,6 +32,23 @@ public class SimpleController {
         return "home";
     }
 
+    @GetMapping("/blank")
+    public String homePage() {
+        return "blank";
+    }
+
+    // @GetMapping("/locations")
+    // public String location(Model model) {
+    //     model.addAttribute("locations", locationService.getAll());
+    //     return "locations";
+    // }
+
+    // @GetMapping("/deleteLocation/{id}")
+    // public String deleteLocation(Model model, @PathVariable(value = "id") long id) {
+    //     locationService.delete(id);
+    //     return "redirect:/locations";
+    // }
+
     @GetMapping("/deleteJob/{id}")
     public String deleteJob(Model model,@PathVariable(value = "id") long id) {
         jobService.delete(id);
