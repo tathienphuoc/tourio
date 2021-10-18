@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="Layouts/main_layout :: head(title='Template')"></head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div th:replace="Layouts/main_layout :: sidebar(location='active')"></div>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Topbar -->
+                <div th:replace="Layouts/main_layout :: topbar"></div>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer th:replace="Layouts/main_layout :: footer">
+
+            </footer>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+
+    <!-- Scroll to Top Button-->
+    <!-- <span th:replace="Layouts/main_layout :: scrollTo('#page-top')">
+    </span> -->
+<span th:replace="Layouts/main_layout :: scrollTo('#page-top')"></span>
+    <!-- End of Page Wrapper -->
+    <div th:replace="Layouts/main_layout :: scripts"></div>
+
+</body>
+</html>

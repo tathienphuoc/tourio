@@ -1,5 +1,7 @@
 package SGU.Tourio.Controllers;
 
+import javax.persistence.EntityExistsException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,9 +10,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import SGU.Tourio.DTO.CreateLocationDTO;
 import SGU.Tourio.Models.Location;
 import SGU.Tourio.Services.LocationService;
-import javassist.NotFoundException;
 
 @Controller
 // @RequestMapping("/locations")
@@ -19,8 +21,7 @@ public class LocationController {
     LocationService locationService;
     
     @GetMapping("/locations")
-    public String location(Model model) {
-        // temporaryData();
+    public String index(Model model) {
         model.addAttribute("locations", locationService.getAll());
         return "Location/index";
     }
@@ -33,13 +34,18 @@ public class LocationController {
 
     @GetMapping("/locations/create")
     public String createLocation(Model model) {
-        model.addAttribute("location", new Location());
+        model.addAttribute("location", new  CreateLocationDTO());
         return "Location/create";
     }
 
     @PostMapping("/locations/create")
-    public String createLocation(@ModelAttribute("location") Location location) {
-        locationService.create(location);
+    public String createLocation(Model model,@ModelAttribute("location") CreateLocationDTO dto) {
+        try {
+            locationService.create(dto);
+        } catch (EntityExistsException e) {
+            model.addAttribute("entityExistsException", e.getMessage());
+            return "Location/create";
+        }
         return "redirect:/locations";
     }
 
@@ -50,30 +56,13 @@ public class LocationController {
     }
 
     @PostMapping("/locations/update")
-    public String updateLocation(@ModelAttribute("location") Location location) {
+    public String updateLocation(Model model, @ModelAttribute("location") Location location) {
         try {
             locationService.update(location);
-        } catch (NotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (EntityExistsException e) {
+            model.addAttribute("entityExistsException", e.getMessage());
+            return "Location/update";
         }
         return "redirect:/locations";
-    }
-
-    public void temporaryData() {
-        locationService.create(new Location((long) 1, "HaNoi"));
-        locationService.create(new Location((long) 2, "TPHCM"));
-        locationService.create(new Location((long) 3, "DaNang"));
-        locationService.create(new Location((long) 4, "VungTau"));
-        locationService.create(new Location((long) 5, "DaLat"));
-        locationService.create(new Location((long) 6, "NhaTrang"));
-
-        // jobService.create(new Job((long) 1, "Job 1"));
-        // jobService.create(new Job((long) 2, "Job 2"));
-        // jobService.create(new Job((long) 3, "Job 3"));
-
-        // employeeService.create(new Employee((long) 1, "Employee 1"));
-        // employeeService.create(new Employee((long) 2, "Employee 1"));
-        // employeeService.create(new Employee((long) 3, "Employee 1"));
     }
 }

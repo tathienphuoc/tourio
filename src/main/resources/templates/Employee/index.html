@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="Layouts/main_layout :: head(title='Locations')"></head>
+<head th:replace="Layouts/main_layout :: head(title='Employees')"></head>
 
 <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <div th:replace="Layouts/main_layout :: sidebar(location='active')"></div>
+        <div th:replace="Layouts/main_layout :: sidebar(employee='active')"></div>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -20,18 +20,18 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h1 mb-3 text-gray-800 text-center">Locations</h1>
+                    <h1 class="h1 mb-3 text-gray-800 text-center">Employees</h1>
                     
                     <div class="mb-4 d-flex justify-content-end">
-                        <a href="/locations/create" class="btn btn-primary btn-lg">
-                            <i class="fas fa-plus-square"></i> Create a Location
+                        <a href="/employees/create" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus-square"></i> Create a Employee
                         </a>
                     </div>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Table Location</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Table Employee</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -50,33 +50,33 @@
                                             <th>Delete</th>
                                         </tr>
                                     </tfoot>
-                                    <th:tbody th:each="location : ${locations}">
+                                    <th:tbody th:each="employee : ${employees}">
                                         <tr>
-                                            <td th:text="${location.getName()}"></td>
+                                            <td th:text="${employee.getName()}"></td>
                                             <td>
-                                                <a th:href="@{/locations/update/{id}(id=${location.getId()})}" class="btn btn-warning btn-circle btn-lg" th:title="'Update &quot;' + ${location.getName()}+'&quot;'">
+                                                <a th:href="@{/employees/update/{id}(id=${employee.getId()})}" class="btn btn-warning btn-circle btn-lg" th:title="'Update &quot;' + ${employee.getName()}+'&quot;'">
                                                     <i class="fas fa-pen-square"></i>
                                                 </a>
                                             </td>
                                             <td>
-                                                <a class="btn btn-danger btn-circle btn-lg" data-toggle="modal" th:attr="data-target='#deleteConfirmationModal'+${location.getId()}" th:title="'Delete &quot;' + ${location.getName()}+'&quot;'">
+                                                <a class="btn btn-danger btn-circle btn-lg" data-toggle="modal" th:attr="data-target='#deleteConfirmationModal'+${employee.getId()}" th:title="'Delete &quot;' + ${employee.getName()}+'&quot;'">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                                 <!-- Delete confirmation  Modal-->
-                                                <div class="modal fade" th:id="'deleteConfirmationModal' + ${location.getId()}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                <div class="modal fade" th:id="'deleteConfirmationModal' + ${employee.getId()}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                                                     aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Delete a Location?</h5>
+                                                                <h5 class="modal-title" id="exampleModalLabel">Delete a Employee?</h5>
                                                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">×</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">Are you sure you want to delete <q class="font-weight-bold" th:text="${location.getName()}"></q>? <br/> You can't undo this action.</div>
+                                                            <div class="modal-body">Are you sure you want to delete <q class="font-weight-bold" th:text="${employee.getName()}"></q>? <br/> You can't undo this action.</div>
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                                                <a class="btn btn-danger"  th:href="@{/locations/delete/{id}(id=${location.getId()})}">Delete</a>
+                                                                <a class="btn btn-danger"  th:href="@{/employees/delete/{id}(id=${employee.getId()})}">Delete</a>
                                                             </div>
                                                         </div>
                                                     </div>

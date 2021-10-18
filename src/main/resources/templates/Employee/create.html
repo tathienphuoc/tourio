@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="Layouts/main_layout :: head(title='Update a Location')"></head>
+<head th:replace="Layouts/main_layout :: head(title='Create a Employee')"></head>
 
 <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <div th:replace="Layouts/main_layout :: sidebar(location='active')"></div>
+        <div th:replace="Layouts/main_layout :: sidebar(employee='active')"></div>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -20,7 +20,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h1 mb-3 text-gray-800 text-center">Update a Location</h1>
+                    <h1 class="h1 mb-3 text-gray-800 text-center">Create a Employee</h1>
                     <div class="mb-3" th:if="${entityExistsException}">
                         <div class="alert alert-danger alert-dismissible fade show w-25 m-auto" role="alert">
                             <p class="m-auto text-center"><strong th:text="${entityExistsException}"></strong></p>
@@ -29,17 +29,16 @@
                             </button>
                         </div>
                     </div>
-                    <form onkeydown="return event.key != 'Enter';" class="form-inline row justify-content-center" method="post" th:action="@{/locations/update}" th:object="${location}">
-                        <input type="number" hidden th:field="*{id}">
-                        <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Enter a Location" th:field="*{name}" autofocus>
-                        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#updateConfirmationModal">Update</button>
-                        <!-- Update confirmation  Modal-->
-                        <div class="modal fade" id="updateConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    <form onkeydown="return event.key != 'Enter';" class="form-inline row justify-content-center" method="post" th:action="@{/employees/create}" th:object="${employee}">
+                        <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Enter a Employee" th:field="*{name}" autofocus>
+                        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#createConfirmationModal">Create</button>
+                        <!-- Create confirmation  Modal-->
+                        <div class="modal fade" id="createConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Update a Location?</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Create a Employee?</h5>
                                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">×</span>
                                         </button>
@@ -67,9 +66,6 @@
         <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
-    
-    <!-- Scroll to Top Button-->
-    <span th:replace="Layouts/main_layout :: scrollTo('#page-top')"></span>
     
     <div th:replace="Layouts/main_layout :: scripts"></div>
 

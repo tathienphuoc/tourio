@@ -1,9 +1,11 @@
 package SGU.Tourio.Utils;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.WordUtils;
 
 public class FormatString {
     public static String TitleCase(String str) {
-        return StringUtils.capitalize(str.trim().replaceAll("(?U)\\s+", ""));
+        if (str == null)
+            throw new NullPointerException();
+        return WordUtils.capitalizeFully(str.trim().replaceAll("(?U)\\s+", " "));
     }
 }
