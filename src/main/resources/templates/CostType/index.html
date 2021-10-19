@@ -1,0 +1,22 @@
+<th:block th:insert="Layouts/main :: main(title='Cost Type', pageName='cost-type', content=~{:: .container-fluid})">
+    <div class="container-fluid">
+        <div th:replace="Layouts/create_button::btn('Cost Type', 'cost-type')"></div>
+
+        <th:block th:insert="Layouts/table::table(title='Cost Type', thead=~{:: #th}, tbody=~{:: #tb})">
+            <tr id="th">
+                <th>Name</th>
+                <th class="fit">Operations</th>
+            </tr>
+
+            <th:tbody id="tb" th:each="type : ${costTypes}">
+                <tr>
+                    <td th:text="${type.getName()}"></td>
+                    <td class="fit">
+                        <div th:replace="Layouts/update_button::btn(id=${type.getId()}, name=${type.getName()}, path='cost-type')"></div>
+                        <div th:replace="Layouts/delete_button::btn (id=${type.getId()}, name=${type.getName()}, path='cost-type')"></div>
+                    </td>
+                </tr>
+            </th:tbody>
+        </th:block>
+    </div>
+</th:block>

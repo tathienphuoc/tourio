@@ -1,0 +1,6 @@
+<div th:fragment="btn(name, path)" class="mb-4 d-flex justify-content-end">
+    <a th:href="@{/{path}/create(path=${path})}" class="btn btn-primary btn-lg">
+        <i class="fas fa-plus-square"></i>
+        <span th:text="Create + ${name}"></span>
+    </a>
+</div>

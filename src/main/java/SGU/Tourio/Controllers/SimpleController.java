@@ -20,11 +20,7 @@ public class SimpleController {
 
     @GetMapping("/")
     public String homePage(Model model) {
-        // temporaryData();
-        model.addAttribute("locations", locationService.getAll());
-        model.addAttribute("jobs", jobService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
-        return "home";
+        return "redirect:/cost-type";
     }
 
     @GetMapping("/blank")
@@ -35,11 +31,6 @@ public class SimpleController {
     @GetMapping("/template")
     public String template() {
         return "template";
-    }
-    
-    @GetMapping("/test")
-    public String test() {
-        return "test";
     }
 
 }

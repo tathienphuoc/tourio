@@ -1,0 +1,24 @@
+<th:block th:fragment="btn(id,name,path)">
+    <a class="btn btn-danger btn-circle" data-toggle="modal" th:attr="data-target='#deleteConfirmationModal'+${id}" th:title="'Delete &quot;' + ${name}+'&quot;'">
+        <i class="fas fa-trash"></i>
+    </a>
+    <!-- Delete confirmation  Modal-->
+    <div class="modal fade" th:id="'deleteConfirmationModal' + ${id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Are you sure you want to delete <q class="font-weight-bold" th:text="${name}"></q>? <br/> You can't undo this action.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger"  th:href="@{/{path}/delete/{id}(id=${id},path=${path})}">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

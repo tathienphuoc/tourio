@@ -1,0 +1,7 @@
+<th:block th:fragment="btn(id, name, path)">
+    <a th:href="@{/{path}/update/{id}(id=${id},path=${path})}"
+       class="btn btn-warning btn-circle"
+       th:title="'Update &quot;' + ${name}+'&quot;'">
+        <i class="fas fa-pen-square"></i>
+    </a>
+</th:block>

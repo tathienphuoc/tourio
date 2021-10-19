@@ -1,5 +1,6 @@
 package SGU.Tourio.Services;
 
+import SGU.Tourio.DTO.CreateCostTypeDTO;
 import SGU.Tourio.Models.CostType;
 import SGU.Tourio.Repositories.CostTypeRepository;
 import javassist.NotFoundException;
@@ -25,7 +26,7 @@ public class CostTypeService {
         return costType.orElse(null);
     }
 
-    public CostType create(CostType dto) throws EntityExistsException {
+    public CostType create(CreateCostTypeDTO dto) throws EntityExistsException {
         CostType costType = new ModelMapper().map(dto, CostType.class);
         return costTypeRepository.save(costType);
     }
