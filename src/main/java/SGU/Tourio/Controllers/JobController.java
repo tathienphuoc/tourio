@@ -19,25 +19,25 @@ public class JobController {
     @Autowired
     JobService jobService;
     
-    @GetMapping("/jobs")
+    @GetMapping("/job")
     public String index(Model model) {
         model.addAttribute("jobs", jobService.getAll());
         return "Job/index";
     }
 
-    @GetMapping("/jobs/delete/{id}")
+    @GetMapping("/job/delete/{id}")
     public String deleteJob(Model model, @PathVariable(value = "id") long id) {
         jobService.delete(id);
-        return "redirect:/jobs";
+        return "redirect:/job";
     }
 
-    @GetMapping("/jobs/create")
+    @GetMapping("/job/create")
     public String createJob(Model model) {
         model.addAttribute("job", new  CreateJobDTO());
         return "Job/create";
     }
 
-    @PostMapping("/jobs/create")
+    @PostMapping("/job/create")
     public String createJob(Model model,@ModelAttribute("job") CreateJobDTO dto) {
         try {
             jobService.create(dto);
@@ -45,16 +45,16 @@ public class JobController {
             model.addAttribute("entityExistsException", e.getMessage());
             return "Job/create";
         }
-        return "redirect:/jobs";
+        return "redirect:/job";
     }
 
-    @GetMapping("/jobs/update/{id}")
+    @GetMapping("/job/update/{id}")
     public String updateJob(Model model, @PathVariable(value = "id") long id) {
         model.addAttribute("job", jobService.get(id));
         return "Job/update";
     }
 
-    @PostMapping("/jobs/update")
+    @PostMapping("/job/update")
     public String updateJob(Model model, @ModelAttribute("job") Job job) {
         try {
             jobService.update(job);
@@ -62,6 +62,6 @@ public class JobController {
             model.addAttribute("entityExistsException", e.getMessage());
             return "Job/update";
         }
-        return "redirect:/jobs";
+        return "redirect:/job";
     }
 }

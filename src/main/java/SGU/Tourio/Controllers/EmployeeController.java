@@ -19,25 +19,25 @@ public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
     
-    @GetMapping("/employees")
+    @GetMapping("/employee")
     public String index(Model model) {
         model.addAttribute("employees", employeeService.getAll());
         return "Employee/index";
     }
 
-    @GetMapping("/employees/delete/{id}")
+    @GetMapping("/employee/delete/{id}")
     public String deleteEmployee(Model model, @PathVariable(value = "id") long id) {
         employeeService.delete(id);
-        return "redirect:/employees";
+        return "redirect:/employee";
     }
 
-    @GetMapping("/employees/create")
+    @GetMapping("/employee/create")
     public String createEmployee(Model model) {
         model.addAttribute("employee", new  CreateEmployeeDTO());
         return "Employee/create";
     }
 
-    @PostMapping("/employees/create")
+    @PostMapping("/employee/create")
     public String createEmployee(Model model,@ModelAttribute("employee") CreateEmployeeDTO dto) {
         try {
             employeeService.create(dto);
@@ -45,16 +45,16 @@ public class EmployeeController {
             model.addAttribute("entityExistsException", e.getMessage());
             return "Employee/create";
         }
-        return "redirect:/employees";
+        return "redirect:/employee";
     }
 
-    @GetMapping("/employees/update/{id}")
+    @GetMapping("/employee/update/{id}")
     public String updateEmployee(Model model, @PathVariable(value = "id") long id) {
         model.addAttribute("employee", employeeService.get(id));
         return "Employee/update";
     }
 
-    @PostMapping("/employees/update")
+    @PostMapping("/employee/update")
     public String updateEmployee(Model model, @ModelAttribute("employee") Employee employee) {
         try {
             employeeService.update(employee);
@@ -62,6 +62,6 @@ public class EmployeeController {
             model.addAttribute("entityExistsException", e.getMessage());
             return "Employee/update";
         }
-        return "redirect:/employees";
+        return "redirect:/employee";
     }
 }

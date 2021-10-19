@@ -15,30 +15,30 @@ import SGU.Tourio.Models.Location;
 import SGU.Tourio.Services.LocationService;
 
 @Controller
-// @RequestMapping("/locations")
+// @RequestMapping("/location")
 public class LocationController {
     @Autowired
     LocationService locationService;
     
-    @GetMapping("/locations")
+    @GetMapping("/location")
     public String index(Model model) {
         model.addAttribute("locations", locationService.getAll());
         return "Location/index";
     }
 
-    @GetMapping("/locations/delete/{id}")
+    @GetMapping("/location/delete/{id}")
     public String deleteLocation(Model model, @PathVariable(value = "id") long id) {
         locationService.delete(id);
-        return "redirect:/locations";
+        return "redirect:/location";
     }
 
-    @GetMapping("/locations/create")
+    @GetMapping("/location/create")
     public String createLocation(Model model) {
         model.addAttribute("location", new  CreateLocationDTO());
         return "Location/create";
     }
 
-    @PostMapping("/locations/create")
+    @PostMapping("/location/create")
     public String createLocation(Model model,@ModelAttribute("location") CreateLocationDTO dto) {
         try {
             locationService.create(dto);
@@ -46,16 +46,16 @@ public class LocationController {
             model.addAttribute("entityExistsException", e.getMessage());
             return "Location/create";
         }
-        return "redirect:/locations";
+        return "redirect:/location";
     }
 
-    @GetMapping("/locations/update/{id}")
+    @GetMapping("/location/update/{id}")
     public String updateLocation(Model model, @PathVariable(value = "id") long id) {
         model.addAttribute("location", locationService.get(id));
         return "Location/update";
     }
 
-    @PostMapping("/locations/update")
+    @PostMapping("/location/update")
     public String updateLocation(Model model, @ModelAttribute("location") Location location) {
         try {
             locationService.update(location);
@@ -63,6 +63,6 @@ public class LocationController {
             model.addAttribute("entityExistsException", e.getMessage());
             return "Location/update";
         }
-        return "redirect:/locations";
+        return "redirect:/location";
     }
 }
