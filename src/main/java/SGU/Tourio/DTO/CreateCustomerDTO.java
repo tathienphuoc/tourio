@@ -2,16 +2,18 @@ package SGU.Tourio.DTO;
 
 import SGU.Tourio.lib.enums.SexType;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCustomerDTO {
     private String name;
-    private String idNumber;
+    private String cccd;
     private String address;
     private String phone;
     private SexType sex;
+    private String nationality;
+
 }

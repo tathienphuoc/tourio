@@ -29,6 +29,7 @@ public class CustomerService {
     }
 
     public Customer create(CreateCustomerDTO dto) throws EntityExistsException {
+        System.out.println(dto);
         Customer customer = new ModelMapper().map(dto, Customer.class);
         return customerRepository.save(customer);
     }

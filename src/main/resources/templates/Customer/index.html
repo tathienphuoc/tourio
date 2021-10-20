@@ -1,0 +1,34 @@
+<th:block th:insert="Layouts/main :: main(title='Customer', pageName='customer', content=~{:: .container-fluid})">
+    <div class="container-fluid">
+        <div th:replace="Layouts/create_button::btn('Customer', 'customer')"></div>
+
+        <th:block th:insert="Layouts/table::table(title='Customer', thead=~{:: #th}, tbody=~{:: #tb})">
+            <tr id="th">
+                <th>ID</th>
+                <th>Name</th>
+                <th>ID Number</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Sex</th>
+                <th>Nationality</th>
+                <th class="fit">Operations</th>
+            </tr>
+
+            <th:tbody id="tb" th:each="customer : ${customers}">
+                <tr>
+                    <td th:text="${customer.getId()}"></td>
+                    <td th:text="${customer.getName()}"></td>
+                    <td th:text="${customer.getCccd()}"></td>
+                    <td th:text="${customer.getAddress()}"></td>
+                    <td th:text="${customer.getPhone()}"></td>
+                    <td th:text="${customer.getSex()}"></td>
+                    <td th:text="${customer.getNationality()}"></td>
+                    <td class="fit">
+                        <div th:replace="Layouts/update_button::btn(id=${customer.getId()}, name=${customer.getName()}, path='customer')"></div>
+                        <div th:replace="Layouts/delete_button::btn (id=${customer.getId()}, name=${customer.getName()}, path='customer')"></div>
+                    </td>
+                </tr>
+            </th:tbody>
+        </th:block>
+    </div>
+</th:block>

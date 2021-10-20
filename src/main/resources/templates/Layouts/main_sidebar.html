@@ -90,6 +90,14 @@
     <!--        </div>-->
     <!--    </li>-->
 
+    <!-- Nav Item - Customer -->
+    <li class="nav-item" th:classappend="${page == 'customer' ? 'active' : ''}">
+        <a class="nav-link" href="/customer">
+            <i class="fas fa-users fa-fw"></i>
+            <span>Customer</span></a>
+
+    </li>
+
     <!-- Nav Item - Employee -->
     <li class="nav-item" th:classappend="${page == 'employee' ? 'active' : ''}">
         <a class="nav-link" href="/employee">

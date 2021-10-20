@@ -17,10 +17,11 @@ public class Customer {
     private Long id;
 
     private String name;
-    private String idNumber;
+    private String cccd;
     private String address;
     private String phone;
+    private String nationality;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private SexType sex;
 }
