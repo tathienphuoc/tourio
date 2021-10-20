@@ -14,7 +14,7 @@
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
         <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fas fa-fw fa-tachometer-alt fa-fw"></i>
             <span>Dashboard</span></a>
     </li>
 
@@ -93,29 +93,36 @@
     <!-- Nav Item - Employee -->
     <li class="nav-item" th:classappend="${page == 'employee' ? 'active' : ''}">
         <a class="nav-link" href="/employee">
-            <i class="fas fa-address-book"></i>
+            <i class="fas fa-address-book fa-fw"></i>
             <span>Employee</span></a>
     </li>
 
     <!-- Nav Item - Location -->
     <li class="nav-item" th:classappend="${page == 'location' ? 'active' : ''}">
         <a class="nav-link" href="/location">
-            <i class="fas fa-map-marked-alt"></i>
+            <i class="fas fa-map-marked-alt fa-fw"></i>
             <span>Location</span></a>
     </li>
 
     <!-- Nav Item - Job -->
     <li class="nav-item" th:classappend="${page == 'job' ? 'active' : ''}">
         <a class="nav-link" href="/job">
-            <i class="fas fa-people-arrows"></i>
+            <i class="fas fa-people-arrows fa-fw"></i>
             <span>Job</span></a>
     </li>
 
     <!-- Nav Item - Cost Type -->
     <li class="nav-item" th:classappend="${page == 'cost-type' ? 'active' : ''}">
         <a class="nav-link" href="/cost-type">
-            <i class="fas fa-dollar-sign"></i>
+            <i class="fas fa-dollar-sign fa-fw"></i>
             <span>Cost Type</span></a>
+    </li>
+
+    <!-- Nav Item - Tour Type -->
+    <li class="nav-item" th:classappend="${page == 'tour-type' ? 'active' : ''}">
+        <a class="nav-link" href="/tour-type">
+            <i class="fas fa-map-marked-alt fa-fw"></i>
+            <span>Tour Type</span></a>
     </li>
 
     <!-- Divider -->

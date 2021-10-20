@@ -13,6 +13,7 @@
     <div id="content-wrapper" class="d-flex flex-column">
         <!-- Main Content -->
         <div id="content" class="mt-5">
+            <h1 class="h1 mb-3 text-gray-800 text-center" th:if="${title}" th:text="${title}"></h1>
             <!-- Begin Page Content -->
             <div th:replace="${content}">
                 Content

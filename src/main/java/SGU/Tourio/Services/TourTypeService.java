@@ -1,5 +1,6 @@
 package SGU.Tourio.Services;
 
+import SGU.Tourio.DTO.CreateTourTypeDTO;
 import SGU.Tourio.Models.TourType;
 import SGU.Tourio.Repositories.TourTypeRepository;
 import javassist.NotFoundException;
@@ -25,7 +26,7 @@ public class TourTypeService {
         return tourType.orElse(null);
     }
 
-    public TourType create(TourType dto) throws EntityExistsException {
+    public TourType create(CreateTourTypeDTO dto) throws EntityExistsException {
         TourType tourType = new ModelMapper().map(dto, TourType.class);
         return tourTypeRepository.save(tourType);
     }

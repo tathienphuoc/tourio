@@ -1,7 +1,6 @@
 <th:block
         th:insert="Layouts/main :: main(title='Create Job', pageName='job', content=~{:: .container-fluid})">
     <div class="container-fluid form-wrap">
-        <h1 class="h1 mb-3 text-gray-800 text-center">Create Job</h1>
         <div th:replace="Layouts/error_message :: error(${entityExistsException})"></div>
         <form onkeydown="return event.key != 'Enter';" method="post" th:action="@{/job/create}" th:object="${job}">
             <div class="form-group">

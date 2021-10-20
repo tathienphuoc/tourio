@@ -1,16 +1,17 @@
 <th:block th:insert="Layouts/main :: main(title='Employee', pageName='employee', content=~{:: .container-fluid})">
     <div class="container-fluid">
-        <h1 class="h1 mb-3 text-gray-800 text-center">Employees</h1>
         <div th:replace="Layouts/create_button::btn(' Employee', 'employee')"></div>
 
         <th:block th:insert="Layouts/table::table(title='Table Employee', thead=~{:: #th}, tbody=~{:: #tb})">
             <tr id="th">
+                <th>ID</th>
                 <th>Name</th>
                 <th class="fit">Operations</th>
             </tr>
 
             <th:tbody id="tb" th:each="employee : ${employees}">
                 <tr>
+                    <td th:text="${employee.getId()}"></td>
                     <td th:text="${employee.getName()}"></td>
                     <td class="fit">
                         <div th:replace="Layouts/update_button::btn(id=${employee.getId()}, name=${employee.getName()}, path='employee')"></div>

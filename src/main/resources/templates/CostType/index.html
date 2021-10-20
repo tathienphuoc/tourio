@@ -4,12 +4,14 @@
 
         <th:block th:insert="Layouts/table::table(title='Cost Type', thead=~{:: #th}, tbody=~{:: #tb})">
             <tr id="th">
+                <th>ID</th>
                 <th>Name</th>
                 <th class="fit">Operations</th>
             </tr>
 
             <th:tbody id="tb" th:each="type : ${costTypes}">
                 <tr>
+                    <td th:text="${type.getId()}"></td>
                     <td th:text="${type.getName()}"></td>
                     <td class="fit">
                         <div th:replace="Layouts/update_button::btn(id=${type.getId()}, name=${type.getName()}, path='cost-type')"></div>

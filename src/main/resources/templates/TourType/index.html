@@ -1,0 +1,24 @@
+<th:block th:insert="Layouts/main :: main(title='Tour Type', pageName='tour-type', content=~{:: .container-fluid})">
+    <div class="container-fluid">
+        <div th:replace="Layouts/create_button::btn('Tour Type', 'tour-type')"></div>
+
+        <th:block th:insert="Layouts/table::table(title='Tour Type', thead=~{:: #th}, tbody=~{:: #tb})">
+            <tr id="th">
+                <th>ID</th>
+                <th>Name</th>
+                <th class="fit">Operations</th>
+            </tr>
+
+            <th:tbody id="tb" th:each="type : ${tourTypes}">
+                <tr>
+                    <td th:text="${type.getId()}"></td>
+                    <td th:text="${type.getName()}"></td>
+                    <td class="fit">
+                        <div th:replace="Layouts/update_button::btn(id=${type.getId()}, name=${type.getName()}, path='tour-type')"></div>
+                        <div th:replace="Layouts/delete_button::btn (id=${type.getId()}, name=${type.getName()}, path='tour-type')"></div>
+                    </td>
+                </tr>
+            </th:tbody>
+        </th:block>
+    </div>
+</th:block>
