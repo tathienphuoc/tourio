@@ -23,4 +23,5 @@ public class CreateGroupDTO {
     private Date dateEnd;
 
     private List<Long> customerIds;
+    private String employeeData;
 }

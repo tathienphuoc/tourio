@@ -7,6 +7,7 @@ import SGU.Tourio.Models.Group;
 import SGU.Tourio.Services.CustomerService;
 import SGU.Tourio.Services.EmployeeService;
 import SGU.Tourio.Services.GroupService;
+import SGU.Tourio.Services.JobService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class GroupController {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    JobService jobService;
+
     @GetMapping("/group")
     public String index(Model model) {
         model.addAttribute("groups", groupService.getAll());
@@ -49,6 +53,8 @@ public class GroupController {
     public String createGroup(Model model) {
         model.addAttribute("group", new CreateGroupDTO());
         model.addAttribute("customers", customerService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("jobs", jobService.getAll());
         return "Group/create";
     }
 

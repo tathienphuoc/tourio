@@ -33,4 +33,7 @@ public class Group {
 
     @ManyToMany
     private List<Customer> customers;
+
+    @OneToMany(targetEntity = GroupEmployeeRel.class)
+    private List<GroupEmployeeRel> employees;
 }
