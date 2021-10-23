@@ -1,0 +1,30 @@
+<th:block th:insert="Layouts/main :: main(title='Group', pageName='group', content=~{:: .container-fluid})">
+    <div class="container-fluid">
+        <div th:replace="Layouts/create_button::btn('Group', 'group')"></div>
+
+        <th:block th:insert="Layouts/table::table(title='Group', thead=~{:: #th}, tbody=~{:: #tb})">
+            <tr id="th">
+                <th>ID</th>
+                <th>Name</th>
+                <th>Start</th>
+                <th>End</th>
+
+                <th class="fit">Operations</th>
+            </tr>
+
+            <th:tbody id="tb" th:each="group : ${groups}">
+                <tr>
+                    <td th:text="${group.getId()}"></td>
+                    <td th:text="${group.getName()}"></td>
+                    <td th:text="${#dates.format(group.getDateStart(), 'dd/MM/yyyy')}"></td>
+                    <td th:text="${#dates.format(group.getDateEnd(), 'dd/MM/yyyy')}"></td>
+
+                    <td class="fit">
+                        <div th:replace="Layouts/update_button::btn(id=${group.getId()}, name=${group.getName()}, path='group')"></div>
+                        <div th:replace="Layouts/delete_button::btn (id=${group.getId()}, name=${group.getName()}, path='group')"></div>
+                    </td>
+                </tr>
+            </th:tbody>
+        </th:block>
+    </div>
+</th:block>

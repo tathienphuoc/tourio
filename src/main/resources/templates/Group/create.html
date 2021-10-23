@@ -1,0 +1,44 @@
+<th:block
+        th:insert="Layouts/main :: main(title='Create Group', pageName='group', content=~{:: .container-fluid})">
+    <div class="container-fluid form-wrap">
+        <div th:replace="Layouts/error_message :: error(${entityExistsException})"></div>
+
+        <form method="post" th:action="@{/group/create}" th:object="${group}">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input class="form-control" id="name" type="text" th:field="*{name}" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Description</label>
+                <textarea class="form-control" id="description" rows="5"
+                          th:field="*{description}"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="dateStart">Start date</label>
+                <input class="form-control" id="dateStart" type="date" th:field="*{dateStart}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="dateEnd">End date</label>
+                <input class="form-control" id="dateEnd" type="date" th:field="*{dateEnd}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="customers">Customers</label>
+                <select class="form-control multiple-select" th:field="*{customerIds}" id="customers" multiple>
+                    <option th:each="c : ${customers}"
+                            th:value="${c.getId()}"
+                            th:text="${c.getId() + ' - ' + c.getName() }">
+                    </option>
+
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a class="btn" href="/group">Back</a>
+        </form>
+    </div>
+
+</th:block>

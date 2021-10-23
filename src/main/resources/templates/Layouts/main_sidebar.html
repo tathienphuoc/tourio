@@ -106,6 +106,13 @@
     </li>
 
     <!-- Nav Item - Location -->
+    <li class="nav-item" th:classappend="${page == 'group' ? 'active' : ''}">
+        <a class="nav-link" href="/group">
+            <i class="fas fa-flag fa-fw"></i>
+            <span>Group</span></a>
+    </li>
+
+    <!-- Nav Item - Location -->
     <li class="nav-item" th:classappend="${page == 'location' ? 'active' : ''}">
         <a class="nav-link" href="/location">
             <i class="fas fa-map-marked-alt fa-fw"></i>

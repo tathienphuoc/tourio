@@ -33,9 +33,11 @@
 
 
 <!-- Scroll to Top Button-->
-<span th:replace="Layouts/main_layout :: scrollTo('#page-top')">A</span>
+<a class="scroll-to-top rounded" th:href="${des}">
+    <i class="fas fa-angle-up"></i>
+</a>
 
-<div th:replace="Layouts/main_layout :: scripts"></div>
+<div th:replace="Layouts/main_script :: scripts"></div>
 
 </body>
 </html>
