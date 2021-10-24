@@ -36,7 +36,7 @@
             </div>
 
             <div class="m2m" data-m2m-caption="Employees">
-                <input name="employeeData" hidden type="text" th:value="${group.getEmployeeData()}"/>
+                <input name="employeeData" hidden type="text"/>
 
                 <div class="m2m-field" data-m2m-type="select" data-m2m-label="Employee" data-m2m-name="employee">
                     <data th:each="e : ${employees}"
@@ -45,8 +45,12 @@
                     </data>
                 </div>
 
-                <div class="m2m-field" data-m2m-type="text" data-m2m-label="Amount" data-m2m-name="amount"></div>
-
+                <div class="m2m-field" data-m2m-type="select" data-m2m-label="Job" data-m2m-name="job">
+                    <data th:each="job : ${jobs}"
+                          th:value="${job.getId()}"
+                          th:text="${job.getName()}">
+                    </data>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary">Create</button>

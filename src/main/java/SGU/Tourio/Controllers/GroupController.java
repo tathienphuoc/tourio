@@ -8,6 +8,7 @@ import SGU.Tourio.Services.CustomerService;
 import SGU.Tourio.Services.EmployeeService;
 import SGU.Tourio.Services.GroupService;
 import SGU.Tourio.Services.JobService;
+import SGU.Tourio.lib.m2m.GroupEmpMapper;
 import javassist.NotFoundException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,6 +35,9 @@ public class GroupController {
 
     @Autowired
     JobService jobService;
+
+    @Autowired
+    GroupEmpMapper groupEmpMapper;
 
     @GetMapping("/group")
     public String index(Model model) {
@@ -71,10 +75,15 @@ public class GroupController {
     public String updateGroup(Model model, @PathVariable(value = "id") long id) {
         Group group = groupService.get(id);
         UpdateGroupDTO dto = new ModelMapper().map(group, UpdateGroupDTO.class);
+
         List<Long> customerIds = group.getCustomers().stream().map(Customer::getId).collect(Collectors.toList());
         dto.setCustomerIds(customerIds);
+        dto.setEmployeeData(groupEmpMapper.toJsonString(group.getGroupEmployeeRels()));
+
         model.addAttribute("group", dto);
         model.addAttribute("customers", customerService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("jobs", jobService.getAll());
         return "Group/update";
     }
 

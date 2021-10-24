@@ -4,8 +4,11 @@ import SGU.Tourio.DTO.CreateGroupDTO;
 import SGU.Tourio.DTO.UpdateGroupDTO;
 import SGU.Tourio.Models.Customer;
 import SGU.Tourio.Models.Group;
+import SGU.Tourio.Models.GroupEmployeeRel;
 import SGU.Tourio.Repositories.CustomerRepository;
+import SGU.Tourio.Repositories.GroupEmpRelRepository;
 import SGU.Tourio.Repositories.GroupRepository;
+import SGU.Tourio.lib.m2m.GroupEmpMapper;
 import javassist.NotFoundException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +30,12 @@ public class GroupService {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    GroupEmpMapper groupEmpMapper;
+
+    @Autowired
+    GroupEmpRelRepository groupEmpRelRepository;
+
     public List<Group> getAll() {
         return groupRepository.findAll();
     }
@@ -42,17 +51,30 @@ public class GroupService {
         List<Customer> customers = customerRepository.findAllById(dto.getCustomerIds());
         group.setCustomers(customers);
 
-        return groupRepository.save(group);
+        Group created = groupRepository.save(group);
+        List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), created);
+
+        groupEmpRelRepository.saveAll(employees);
+        return created;
     }
 
     public Group update(UpdateGroupDTO dto) throws NotFoundException {
-        if (!groupRepository.existsById(dto.getId())) {
+        Optional<Group> existed = groupRepository.findById(dto.getId());
+
+        if (!existed.isPresent()) {
             throw new NotFoundException("Not Existed");
         }
         Group group = new ModelMapper().map(dto, Group.class);
 
-        List<Customer> customers = customerRepository.findAllById(dto.getCustomerIds());
-        group.setCustomers(customers);
+        if (dto.getCustomerIds() != null) {
+            List<Customer> customers = customerRepository.findAllById(dto.getCustomerIds());
+            group.setCustomers(customers);
+        }
+
+        groupEmpRelRepository.deleteAll(existed.get().getGroupEmployeeRels());
+
+        List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), group);
+        groupEmpRelRepository.saveAll(employees);
 
         return groupRepository.save(group);
     }

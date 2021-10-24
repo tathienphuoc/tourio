@@ -3,6 +3,7 @@ package SGU.Tourio.Models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -34,6 +35,7 @@ public class Group {
     @ManyToMany
     private List<Customer> customers;
 
-    @OneToMany(targetEntity = GroupEmployeeRel.class)
-    private List<GroupEmployeeRel> employees;
+    @OneToMany(mappedBy = "group")
+    @ToString.Exclude
+    private List<GroupEmployeeRel> groupEmployeeRels;
 }

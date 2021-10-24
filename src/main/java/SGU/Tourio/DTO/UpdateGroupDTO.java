@@ -23,4 +23,5 @@ public class UpdateGroupDTO {
     private Date dateEnd;
 
     private List<Long> customerIds;
+    private String employeeData;
 }

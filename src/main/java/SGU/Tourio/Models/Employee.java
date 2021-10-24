@@ -5,6 +5,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -13,13 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Employee {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @OneToMany(targetEntity = GroupEmployeeRel.class)
-    private List<GroupEmployeeRel> groups;
+    @OneToMany(mappedBy = "employee")
+    @ToString.Exclude
+    private List<GroupEmployeeRel> groupEmployeeRels;
 }

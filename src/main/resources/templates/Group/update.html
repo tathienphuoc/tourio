@@ -30,14 +30,32 @@
 
             <div class="form-group">
                 <label for="customers">Customers</label>
-                <select class="form-control" name="customerIds" id="customers" multiple>
+                <select class="form-control multiple-select" name="customerIds" id="customers" multiple>
                     <option th:each="c : ${customers}"
-                            th:selected="${group.getCustomerIds().contains(c.getId())}"
+                            th:selected="${group.getCustomerIds() && group.getCustomerIds().contains(c.getId())}"
                             th:value="${c.getId()}"
                             th:text="${c.getName()}">
                     </option>
 
                 </select>
+            </div>
+
+            <div class="m2m" data-m2m-caption="Employees">
+                <input name="employeeData" hidden type="text" th:value="${group.getEmployeeData()}"/>
+
+                <div class="m2m-field" data-m2m-type="select" data-m2m-label="Employee" data-m2m-name="employee">
+                    <data th:each="e : ${employees}"
+                          th:value="${e.getId()}"
+                          th:text="${e.getName()}">
+                    </data>
+                </div>
+
+                <div class="m2m-field" data-m2m-type="select" data-m2m-label="Job" data-m2m-name="job">
+                    <data th:each="job : ${jobs}"
+                          th:value="${job.getId()}"
+                          th:text="${job.getName()}">
+                    </data>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>
