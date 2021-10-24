@@ -7,6 +7,8 @@ import SGU.Tourio.Models.Group;
 import SGU.Tourio.Repositories.CustomerRepository;
 import SGU.Tourio.Repositories.GroupRepository;
 import javassist.NotFoundException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +37,6 @@ public class GroupService {
     }
 
     public Group create(CreateGroupDTO dto) throws EntityExistsException {
-        System.out.println(dto);
         Group group = new ModelMapper().map(dto, Group.class);
 
         List<Customer> customers = customerRepository.findAllById(dto.getCustomerIds());

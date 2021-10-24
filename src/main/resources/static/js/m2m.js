@@ -1,37 +1,25 @@
 /**
- *
- * @param field {Element}
- * @returns {{data: [{value: string, text: string}], label: string, type: string}}
+ * @returns {{label: string, type: string, name: string, data: [{value: string, text: string}]}}
  */
-function getFieldData(field) {
-    const type = $(field).data('m2m-type')
-    const label = $(field).data('m2m-label')
+function getFieldDef() {
+    const type = $(this).data('m2m-type')
+    const label = $(this).data('m2m-label')
+    const name = $(this).data('m2m-name')
     let data = []
     if (type === 'select') {
-        $(field).children('data').each(function () {
+        $(this).children('data').each(function () {
             data.push({
                 value: $(this).val(),
                 text: $(this).text()
             })
         })
     }
-    return {type, label, data}
+    return {type, label, name, data}
 }
 
 /**
  *
- * @param wrapper {Element}
- * @returns [{data: [{value: string, text: string}], label: string, type: string}]
- */
-function getFieldDataList(wrapper) {
-    return $(wrapper).children('.m2m-field').map(function () {
-        return getFieldData(this)
-    }).get()
-}
-
-/**
- *
- * @param data {[{data: [{value: string, text: string}], label: string, type: string}]}
+ * @param data {[{label: string, type: string, name: string, data: [{value: string, text: string}]}]}
  * @returns {string}
  */
 function buildHeadings(data) {
@@ -41,16 +29,7 @@ function buildHeadings(data) {
 
 /**
  *
- * @param val {string}
- * @returns [string[]]
- */
-function decode(val) {
-    return val !== '' ? val.split(',').map(row => row.split('|')) : []
-}
-
-/**
- *
- * @param def {{data: [{value: string, text: string}], label: string, type: string}}
+ * @param def {{label: string, type: string, name: string, data: [{value: string, text: string}]}}
  * @param value {string}
  * @param id {string}
  * @returns {string}
@@ -58,7 +37,7 @@ function decode(val) {
 function buildCell(def, value, id) {
     let cell
     if (def.type === 'select') {
-        const options = def.data.map(d => `<option ${d.value === value ? 'selected' : ''} value="${d.value}">${d.text}</option>`).join()
+        const options = def.data.map(d => `<option ${d.value === value.toString() ? 'selected' : ''} value="${d.value}">${d.text}</option>`).join()
         cell = `
             <div class="form-group">
                 <select data-m2m-id="${id}" class="m2m-input form-control">
@@ -79,12 +58,12 @@ function buildCell(def, value, id) {
 
 /**
  *
- * @param defs {[{data: [{value: string, text: string}], label: string, type: string}]}
- * @param values {[string]}
+ * @param defs {[{label: string, type: string, name: string, data: [{value: string, text: string}]}]}
+ * @param value {Object}
  * @param id {string}
  */
-function buildRow(defs, values, id) {
-    let cells = defs.map((d, i) => buildCell(d, values[i] || '', id + '-' + i))
+function buildRow(defs, value, id) {
+    let cells = defs.map((d, i) => buildCell(d, value[d.name] || '', id + '-' + d.name))
     cells.push(`
         <td class="fit">
             <a data-m2m-id="${id}" class="m2m-remove-btn btn btn-danger btn-circle">
@@ -96,11 +75,21 @@ function buildRow(defs, values, id) {
 
 /**
  *
- * @param data {[string[]]}
+ * @param val {string}
+ * @returns {[Object]}
+ */
+function decode(val) {
+    return val !== '' ? JSON.parse(val) : []
+}
+
+/**
+ *
+ * @param data {[Object]}
  * @return {string}
  */
 function encode(data) {
-    return data.filter(r => r.length).map(row => row.map(c => c === '' ? 'null' : c).join('|')).join(',')
+    console.log(JSON.stringify(data))
+    return JSON.stringify(data)
 }
 
 function updateRemoveEvent(sourceData, input) {
@@ -108,31 +97,30 @@ function updateRemoveEvent(sourceData, input) {
     removeBtn.off('click')
     removeBtn.click(function () {
         const id = $(this).data('m2m-id')
-        sourceData[+id.split('-')[1]] = []
+        sourceData[+id.split('-')[1]] = {}
         $(`#${id}`).hide()
-        input.val(encode(sourceData))
-    })
-}
-
-
-function updateEditEvent(sourceData, input) {
-    const removeBtn = $('.m2m-input')
-    removeBtn.off('input')
-    removeBtn.on('input', function () {
-        const [, row, col] = $(this).data('m2m-id').split('-')
-        sourceData[+row][+col] = $(this).val()
         input.val(encode(sourceData))
     })
 }
 
 /**
  *
- * @param target {Element}
- *
+ * @param sourceData {[Object]}
+ * @param input
  */
+function updateEditEvent(sourceData, input) {
+    const removeBtn = $('.m2m-input')
+    removeBtn.off('input')
+    removeBtn.on('input', function () {
+        const [, rowId, colName] = $(this).data('m2m-id').split('-')
+        sourceData[+rowId][colName] = $(this).val()
+        input.val(encode(sourceData))
+    })
+}
+
 function build(target) {
     const input = $(target).children('input')
-    const defs = getFieldDataList(target)
+    const defs = $(target).children('.m2m-field').map(getFieldDef).get()
     const sourceData = decode(input.val())
     const name = input.attr('name')
     const title = $(target).data('m2m-caption')
@@ -149,8 +137,8 @@ function build(target) {
     table.before(caption)
 
     addBtn.click(function () {
-        body.append(buildRow(defs, [], name + '-' + sourceData.length))
-        sourceData.push(Array(defs.length).fill(''))
+        body.append(buildRow(defs, {}, name + '-' + sourceData.length))
+        sourceData.push({})
         updateRemoveEvent(sourceData, input)
         updateEditEvent(sourceData, input)
     })
