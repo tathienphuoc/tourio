@@ -42,7 +42,7 @@ public class JobController {
         try {
             jobService.create(dto);
         } catch (EntityExistsException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "Job/create";
         }
         return "redirect:/job";
@@ -59,7 +59,7 @@ public class JobController {
         try {
             jobService.update(job);
         } catch (EntityExistsException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "Job/update";
         }
         return "redirect:/job";

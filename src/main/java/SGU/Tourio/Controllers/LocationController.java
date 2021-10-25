@@ -43,7 +43,7 @@ public class LocationController {
         try {
             locationService.create(dto);
         } catch (EntityExistsException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "Location/create";
         }
         return "redirect:/location";
@@ -60,7 +60,7 @@ public class LocationController {
         try {
             locationService.update(location);
         } catch (EntityExistsException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "Location/update";
         }
         return "redirect:/location";

@@ -42,7 +42,7 @@ public class EmployeeController {
         try {
             employeeService.create(dto);
         } catch (EntityExistsException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "Employee/create";
         }
         return "redirect:/employee";
@@ -59,7 +59,7 @@ public class EmployeeController {
         try {
             employeeService.update(employee);
         } catch (EntityExistsException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "Employee/update";
         }
         return "redirect:/employee";

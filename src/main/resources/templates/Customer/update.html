@@ -2,7 +2,7 @@
         th:insert="Layouts/main :: main(title='Update Customer', pageName='customer', content=~{:: .container-fluid})">
     <!-- Begin Page Content -->
     <div class="container-fluid form-wrap">
-        <div th:replace="Layouts/error_message :: error(${entityExistsException})"></div>
+        <div th:replace="Layouts/error_message :: error(${error})"></div>
 
         <form method="post" th:action="@{/customer/update}" th:object="${customer}">
             <input type="number" hidden th:field="*{id}">

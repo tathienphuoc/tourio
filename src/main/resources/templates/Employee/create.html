@@ -1,7 +1,7 @@
 <th:block
         th:insert="Layouts/main :: main(title='Create Employee', pageName='employee', content=~{:: .container-fluid})">
     <div class="container-fluid form-wrap">
-        <div th:replace="Layouts/error_message :: error(${entityExistsException})"></div>
+        <div th:replace="Layouts/error_message :: error(${error})"></div>
         <form onkeydown="return event.key != 'Enter';" method="post" th:action="@{/employee/create}" th:object="${employee}">
             <div class="form-group">
                 <label for="name">Name</label>

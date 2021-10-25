@@ -42,7 +42,7 @@ public class CostTypeController {
         try {
             costTypeService.create(dto);
         } catch (EntityExistsException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "CostType/create";
         }
         return "redirect:/cost-type";
@@ -59,7 +59,7 @@ public class CostTypeController {
         try {
             costTypeService.update(costType);
         } catch (EntityExistsException | NotFoundException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "CostType/update";
         }
         return "redirect:/cost-type";

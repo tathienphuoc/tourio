@@ -42,7 +42,7 @@ public class CustomerController {
         try {
             customerService.create(dto);
         } catch (EntityExistsException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "Customer/create";
         }
         return "redirect:/customer";
@@ -59,7 +59,7 @@ public class CustomerController {
         try {
             customerService.update(customer);
         } catch (EntityExistsException | NotFoundException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "Customer/update";
         }
         return "redirect:/customer";

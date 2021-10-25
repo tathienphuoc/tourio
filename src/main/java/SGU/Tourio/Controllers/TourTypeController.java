@@ -42,7 +42,7 @@ public class TourTypeController {
         try {
             tourTypeService.create(dto);
         } catch (EntityExistsException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "TourType/create";
         }
         return "redirect:/tour-type";
@@ -59,7 +59,7 @@ public class TourTypeController {
         try {
             tourTypeService.update(tourType);
         } catch (EntityExistsException | NotFoundException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "TourType/update";
         }
         return "redirect:/tour-type";

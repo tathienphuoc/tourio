@@ -1,7 +1,7 @@
 <th:block
         th:insert="Layouts/main :: main(title='Create Cost Type', pageName='cost-type', content=~{:: .container-fluid})">
     <div class="container-fluid form-wrap">
-        <div th:replace="Layouts/error_message :: error(${entityExistsException})"></div>
+        <div th:replace="Layouts/error_message :: error(${error})"></div>
 
         <form method="post" th:action="@{/cost-type/create}" th:object="${costType}">
             <div class="form-group">

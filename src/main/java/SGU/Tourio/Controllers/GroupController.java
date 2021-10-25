@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,15 +65,19 @@ public class GroupController {
     public String createGroup(Model model, @ModelAttribute("group") CreateGroupDTO dto) {
         try {
             groupService.create(dto);
-        } catch (EntityExistsException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("group", dto);
+            model.addAttribute("customers", customerService.getAll());
+            model.addAttribute("employees", employeeService.getAll());
+            model.addAttribute("jobs", jobService.getAll());
             return "Group/create";
         }
         return "redirect:/group";
     }
 
     @GetMapping("/group/update/{id}")
-    public String updateGroup(Model model, @PathVariable(value = "id") long id) {
+    public String updateGroup(Model model, @PathVariable(value = "id") long id) throws Exception {
         Group group = groupService.get(id);
         UpdateGroupDTO dto = new ModelMapper().map(group, UpdateGroupDTO.class);
 
@@ -88,12 +93,18 @@ public class GroupController {
     }
 
     @PostMapping("/group/update")
-    public String updateGroup(Model model, @ModelAttribute("group") UpdateGroupDTO group) {
+    public String updateGroup(Model model, HttpServletRequest request, @ModelAttribute("group") UpdateGroupDTO dto) {
         try {
-            groupService.update(group);
-        } catch (EntityExistsException | NotFoundException e) {
-            model.addAttribute("entityExistsException", e.getMessage());
+            groupService.update(dto);
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+//            model.addAttribute("group", dto);
+            model.addAttribute("customers", customerService.getAll());
+            model.addAttribute("employees", employeeService.getAll());
+            model.addAttribute("jobs", jobService.getAll());
             return "Group/update";
+//            String referer = request.getHeader("Referer");
+//            return "redirect:"+ referer;
         }
         return "redirect:/group";
     }

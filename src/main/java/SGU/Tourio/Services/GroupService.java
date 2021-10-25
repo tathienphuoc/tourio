@@ -45,20 +45,21 @@ public class GroupService {
         return group.orElse(null);
     }
 
-    public Group create(CreateGroupDTO dto) throws EntityExistsException {
+    public Group create(CreateGroupDTO dto) throws Exception {
         Group group = new ModelMapper().map(dto, Group.class);
 
         List<Customer> customers = customerRepository.findAllById(dto.getCustomerIds());
         group.setCustomers(customers);
 
         Group created = groupRepository.save(group);
-        List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), created);
 
+        List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), created);
         groupEmpRelRepository.saveAll(employees);
+
         return created;
     }
 
-    public Group update(UpdateGroupDTO dto) throws NotFoundException {
+    public Group update(UpdateGroupDTO dto) throws Exception {
         Optional<Group> existed = groupRepository.findById(dto.getId());
 
         if (!existed.isPresent()) {
@@ -74,8 +75,12 @@ public class GroupService {
         groupEmpRelRepository.deleteAll(existed.get().getGroupEmployeeRels());
 
         List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), group);
-        groupEmpRelRepository.saveAll(employees);
-
+        try {
+            groupEmpRelRepository.saveAll(employees);
+        } catch (Exception e) {
+            groupEmpRelRepository.saveAll(existed.get().getGroupEmployeeRels());
+            throw e;
+        }
         return groupRepository.save(group);
     }
 

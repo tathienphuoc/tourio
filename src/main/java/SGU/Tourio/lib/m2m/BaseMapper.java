@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseMapper<Dest, Parent> {
-    protected abstract Dest convert(JSONObject object, Parent parent);
+    protected abstract Dest convert(JSONObject object, Parent parent) throws Exception;
 
-    protected abstract JSONObject convertJson(Dest entity);
+    protected abstract JSONObject convertJson(Dest entity) throws Exception;
 
-    public List<Dest> toEntities(String data, Parent parent) {
+    public List<Dest> toEntities(String data, Parent parent) throws Exception {
         List<Dest> result = new ArrayList<>();
         JSONArray list = new JSONArray(data);
         for (int i = 0; i < list.length(); i++) {
@@ -23,7 +23,7 @@ public abstract class BaseMapper<Dest, Parent> {
         return result;
     }
 
-    public String toJsonString(List<Dest> entities) {
+    public String toJsonString(List<Dest> entities) throws Exception {
         JSONArray list = new JSONArray();
         for (Dest entity : entities) {
             list.put(convertJson(entity));
