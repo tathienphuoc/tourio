@@ -58,6 +58,20 @@
                 </div>
             </div>
 
+            <div class="m2m" data-m2m-caption="Costs">
+                <input name="costData" hidden type="text" th:value="${group.getCostData()}"/>
+
+                <div class="m2m-field" data-m2m-type="select" data-m2m-label="Type" data-m2m-name="costType">
+                    <data th:each="type : ${costTypes}"
+                          th:value="${type.getId()}"
+                          th:text="${type.getName()}">
+                    </data>
+                </div>
+
+                <div class="m2m-field" data-m2m-type="number" data-m2m-label="Amount" data-m2m-name="amount">
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-primary">Update</button>
             <a class="btn" href="/group">Back</a>
         </form>

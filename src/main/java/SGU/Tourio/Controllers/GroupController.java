@@ -4,10 +4,8 @@ import SGU.Tourio.DTO.CreateGroupDTO;
 import SGU.Tourio.DTO.UpdateGroupDTO;
 import SGU.Tourio.Models.Customer;
 import SGU.Tourio.Models.Group;
-import SGU.Tourio.Services.CustomerService;
-import SGU.Tourio.Services.EmployeeService;
-import SGU.Tourio.Services.GroupService;
-import SGU.Tourio.Services.JobService;
+import SGU.Tourio.Services.*;
+import SGU.Tourio.lib.m2m.GroupCostMapper;
 import SGU.Tourio.lib.m2m.GroupEmpMapper;
 import javassist.NotFoundException;
 import org.json.JSONArray;
@@ -38,7 +36,13 @@ public class GroupController {
     JobService jobService;
 
     @Autowired
+    CostTypeService costTypeService;
+
+    @Autowired
     GroupEmpMapper groupEmpMapper;
+
+    @Autowired
+    GroupCostMapper groupCostMapper;
 
     @GetMapping("/group")
     public String index(Model model) {
@@ -58,6 +62,7 @@ public class GroupController {
         model.addAttribute("customers", customerService.getAll());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("jobs", jobService.getAll());
+        model.addAttribute("costTypes", costTypeService.getAll());
         return "Group/create";
     }
 
@@ -71,6 +76,7 @@ public class GroupController {
             model.addAttribute("customers", customerService.getAll());
             model.addAttribute("employees", employeeService.getAll());
             model.addAttribute("jobs", jobService.getAll());
+            model.addAttribute("costTypes", costTypeService.getAll());
             return "Group/create";
         }
         return "redirect:/group";
@@ -83,12 +89,15 @@ public class GroupController {
 
         List<Long> customerIds = group.getCustomers().stream().map(Customer::getId).collect(Collectors.toList());
         dto.setCustomerIds(customerIds);
+
         dto.setEmployeeData(groupEmpMapper.toJsonString(group.getGroupEmployeeRels()));
+        dto.setCostData(groupCostMapper.toJsonString(group.getGroupCostRels()));
 
         model.addAttribute("group", dto);
         model.addAttribute("customers", customerService.getAll());
         model.addAttribute("employees", employeeService.getAll());
         model.addAttribute("jobs", jobService.getAll());
+        model.addAttribute("costTypes", costTypeService.getAll());
         return "Group/update";
     }
 
@@ -98,13 +107,11 @@ public class GroupController {
             groupService.update(dto);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
-//            model.addAttribute("group", dto);
             model.addAttribute("customers", customerService.getAll());
             model.addAttribute("employees", employeeService.getAll());
             model.addAttribute("jobs", jobService.getAll());
+            model.addAttribute("costTypes", costTypeService.getAll());
             return "Group/update";
-//            String referer = request.getHeader("Referer");
-//            return "redirect:"+ referer;
         }
         return "redirect:/group";
     }

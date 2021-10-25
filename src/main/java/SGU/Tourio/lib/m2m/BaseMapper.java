@@ -13,6 +13,9 @@ public abstract class BaseMapper<Dest, Parent> {
 
     public List<Dest> toEntities(String data, Parent parent) throws Exception {
         List<Dest> result = new ArrayList<>();
+        if (data.isEmpty()) {
+            return result;
+        }
         JSONArray list = new JSONArray(data);
         for (int i = 0; i < list.length(); i++) {
             Dest entity = this.convert(list.getJSONObject(i), parent);

@@ -4,23 +4,21 @@ import SGU.Tourio.DTO.CreateGroupDTO;
 import SGU.Tourio.DTO.UpdateGroupDTO;
 import SGU.Tourio.Models.Customer;
 import SGU.Tourio.Models.Group;
+import SGU.Tourio.Models.GroupCostRel;
 import SGU.Tourio.Models.GroupEmployeeRel;
 import SGU.Tourio.Repositories.CustomerRepository;
+import SGU.Tourio.Repositories.GroupCostRelRepository;
 import SGU.Tourio.Repositories.GroupEmpRelRepository;
 import SGU.Tourio.Repositories.GroupRepository;
+import SGU.Tourio.lib.m2m.GroupCostMapper;
 import SGU.Tourio.lib.m2m.GroupEmpMapper;
 import javassist.NotFoundException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class GroupService {
@@ -31,10 +29,16 @@ public class GroupService {
     CustomerRepository customerRepository;
 
     @Autowired
+    GroupEmpRelRepository groupEmpRelRepository;
+
+    @Autowired
+    GroupCostRelRepository groupCostRelRepository;
+
+    @Autowired
     GroupEmpMapper groupEmpMapper;
 
     @Autowired
-    GroupEmpRelRepository groupEmpRelRepository;
+    GroupCostMapper groupCostMapper;
 
     public List<Group> getAll() {
         return groupRepository.findAll();
@@ -56,6 +60,9 @@ public class GroupService {
         List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), created);
         groupEmpRelRepository.saveAll(employees);
 
+        List<GroupCostRel> costs = groupCostMapper.toEntities(dto.getCostData(), created);
+        groupCostRelRepository.saveAll(costs);
+
         return created;
     }
 
@@ -73,12 +80,16 @@ public class GroupService {
         }
 
         groupEmpRelRepository.deleteAll(existed.get().getGroupEmployeeRels());
+        groupCostRelRepository.deleteAll(existed.get().getGroupCostRels());
 
         List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), group);
+        List<GroupCostRel> costs = groupCostMapper.toEntities(dto.getCostData(), group);
         try {
             groupEmpRelRepository.saveAll(employees);
+            groupCostRelRepository.saveAll(costs);
         } catch (Exception e) {
             groupEmpRelRepository.saveAll(existed.get().getGroupEmployeeRels());
+            groupCostRelRepository.saveAll(existed.get().getGroupCostRels());
             throw e;
         }
         return groupRepository.save(group);

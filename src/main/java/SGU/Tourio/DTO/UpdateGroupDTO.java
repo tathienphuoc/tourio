@@ -14,14 +14,20 @@ import java.util.Set;
 @NoArgsConstructor
 public class UpdateGroupDTO {
     private Long id;
+
     private String name;
+
     private String description;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateStart;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateEnd;
 
     private List<Long> customerIds;
+
     private String employeeData;
+
+    private String costData;
 }

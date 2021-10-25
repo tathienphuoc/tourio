@@ -21,5 +21,19 @@ public class MappedObject {
         }
     }
 
+    public Long getLong(String field) {
+        if (this.obj.has(field)) {
+            return Long.parseLong(this.obj.getString(field));
+        }
+        return null;
+    }
+
+    public String getString(String field) {
+        if (this.obj.has(field)) {
+            return this.obj.getString(field);
+        }
+        return null;
+    }
+
 
 }

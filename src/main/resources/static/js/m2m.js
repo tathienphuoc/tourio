@@ -36,11 +36,12 @@ function buildHeadings(data) {
  */
 function buildCell(def, value, id) {
     let cell
+    const [fieldName] = id.split('-')
     if (def.type === 'select') {
         const options = def.data.map(d => `<option ${d.value === value.toString() ? 'selected' : ''} value="${d.value}">${d.text}</option>`).join()
         cell = `
             <div class="form-group">
-                <select data-m2m-id="${id}" class="m2m-input form-control">
+                <select data-m2m-id="${id}" class="m2m-input-${fieldName} form-control">
                     <option disabled selected value> -- select an option -- </option>
                     ${options}
                 </select>
@@ -49,7 +50,7 @@ function buildCell(def, value, id) {
     } else {
         cell = `
             <div class="form-group">
-                <input data-m2m-id="${id}" class="m2m-input form-control" type="${def.type}" value="${value}"/>
+                <input data-m2m-id="${id}" class="m2m-input-${fieldName} form-control" type="${def.type}" value="${value}"/>
             </div>
         `
     }
@@ -107,13 +108,14 @@ function updateRemoveEvent(sourceData, input) {
  *
  * @param sourceData {[Object]}
  * @param input
+ * @param name {string}
  */
-function updateEditEvent(sourceData, input) {
-    const removeBtn = $('.m2m-input')
-    removeBtn.off('input')
-    removeBtn.on('input', function () {
+function updateEditEvent(sourceData, input, name) {
+    const inputField = $(`.m2m-input-${name}`)
+    inputField.off('input')
+    inputField.on('input', function () {
         const [, rowId, colName] = $(this).data('m2m-id').split('-')
-        sourceData[+rowId][colName] = $(this).val()
+        sourceData[+rowId][colName] = $(this).val().toString()
         input.val(encode(sourceData))
     })
 }
@@ -140,11 +142,11 @@ function build(target) {
         body.append(buildRow(defs, {}, name + '-' + sourceData.length))
         sourceData.push({})
         updateRemoveEvent(sourceData, input)
-        updateEditEvent(sourceData, input)
+        updateEditEvent(sourceData, input, name)
     })
 
-    updateEditEvent(sourceData, input)
     updateRemoveEvent(sourceData, input)
+    updateEditEvent(sourceData, input, name)
 }
 
 $(document).ready(function () {

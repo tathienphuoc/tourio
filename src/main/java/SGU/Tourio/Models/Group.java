@@ -38,4 +38,8 @@ public class Group {
     @OneToMany(mappedBy = "group")
     @ToString.Exclude
     private List<GroupEmployeeRel> groupEmployeeRels;
+
+    @OneToMany(mappedBy = "group")
+    @ToString.Exclude
+    private List<GroupCostRel> groupCostRels;
 }
