@@ -1,6 +1,10 @@
 <th:block th:insert="Layouts/main :: main(title='Group', pageName='group', content=~{:: .container-fluid})">
     <div class="container-fluid">
-        <div th:replace="Layouts/create_button::btn('Group', 'group')"></div>
+        <div class="row">
+            <div th:replace="Layouts/create_button::btn('Group', 'group')"></div>
+
+            <div th:replace="Layouts/date_range::inp"></div>
+        </div>
 
         <th:block th:insert="Layouts/table::table(title='Group', thead=~{:: #th}, tbody=~{:: #tb})">
             <tr id="th">

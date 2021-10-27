@@ -150,6 +150,8 @@ function build(target) {
 }
 
 $(document).ready(function () {
+    $('.multiple-select').select2();
+
     $('.m2m').each(function () {
         build(this)
     })

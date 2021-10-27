@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -45,8 +47,8 @@ public class GroupController {
     GroupCostMapper groupCostMapper;
 
     @GetMapping("/group")
-    public String index(Model model) {
-        model.addAttribute("groups", groupService.getAllForView());
+    public String index(Model model, @RequestParam("from") Optional<String> from, @RequestParam("to") Optional<String> to) throws ParseException {
+        model.addAttribute("groups", groupService.getAllForView(from, to));
         return "Group/index";
     }
 
