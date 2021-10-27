@@ -6,8 +6,12 @@
             <tr id="th">
                 <th>ID</th>
                 <th>Name</th>
+                <th>Price</th>
                 <th>Start</th>
                 <th>End</th>
+                <th>Customer</th>
+                <th>Employee</th>
+                <th>Total Cost</th>
 
                 <th class="fit">Operations</th>
             </tr>
@@ -16,8 +20,12 @@
                 <tr>
                     <td th:text="${group.getId()}"></td>
                     <td th:text="${group.getName()}"></td>
+                    <td th:text="${group.getTourPrice()}"></td>
                     <td th:text="${#dates.format(group.getDateStart(), 'dd/MM/yyyy')}"></td>
                     <td th:text="${#dates.format(group.getDateEnd(), 'dd/MM/yyyy')}"></td>
+                    <td th:text="${group.getCustomerCount()}"></td>
+                    <td th:text="${group.getEmployeeCount()}"></td>
+                    <td th:text="${group.getCostTotal()}"></td>
 
                     <td class="fit">
                         <div th:replace="Layouts/update_button::btn(id=${group.getId()}, name=${group.getName()}, path='group')"></div>

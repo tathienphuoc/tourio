@@ -46,7 +46,7 @@ public class GroupController {
 
     @GetMapping("/group")
     public String index(Model model) {
-        model.addAttribute("groups", groupService.getAll());
+        model.addAttribute("groups", groupService.getAllForView());
         return "Group/index";
     }
 

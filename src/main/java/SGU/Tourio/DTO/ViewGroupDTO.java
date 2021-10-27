@@ -12,13 +12,21 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ViewGroupDTO {
+    private Long id;
+
     private String name;
-    private String description;
+
+    private Long tourPrice;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateStart;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateEnd;
 
-    private int customerCount;
+    private Integer customerCount;
+
+    private Integer employeeCount;
+
+    private Long costTotal;
 }

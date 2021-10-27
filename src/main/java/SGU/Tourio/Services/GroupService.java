@@ -2,6 +2,7 @@ package SGU.Tourio.Services;
 
 import SGU.Tourio.DTO.CreateGroupDTO;
 import SGU.Tourio.DTO.UpdateGroupDTO;
+import SGU.Tourio.DTO.ViewGroupDTO;
 import SGU.Tourio.Models.Customer;
 import SGU.Tourio.Models.Group;
 import SGU.Tourio.Models.GroupCostRel;
@@ -17,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +44,19 @@ public class GroupService {
 
     public List<Group> getAll() {
         return groupRepository.findAll();
+    }
+
+    public List<ViewGroupDTO> getAllForView() {
+        List<Group> groups = getAll();
+        List<ViewGroupDTO> dtoList = new ArrayList<>();
+        for (Group group : groups) {
+            ViewGroupDTO dto = new ModelMapper().map(group, ViewGroupDTO.class);
+            dto.setCustomerCount(group.getCustomers().size());
+            dto.setEmployeeCount(group.getGroupEmployeeRels().size());
+            dto.setCostTotal(group.getGroupCostRels().stream().map(GroupCostRel::getAmount).reduce(0L, Long::sum));
+            dtoList.add(dto);
+        }
+        return dtoList;
     }
 
     public Group get(long id) {

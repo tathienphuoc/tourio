@@ -32,7 +32,7 @@
                 <label for="customers">Customers</label>
                 <select class="form-control multiple-select" name="customerIds" id="customers" multiple>
                     <option th:each="c : ${customers}"
-                            th:selected="${group.getCustomerIds() && group.getCustomerIds().contains(c.getId())}"
+                            th:selected="${!group.getCustomerIds().isEmpty() && group.getCustomerIds().contains(c.getId())}"
                             th:value="${c.getId()}"
                             th:text="${c.getName()}">
                     </option>
