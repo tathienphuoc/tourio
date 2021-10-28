@@ -5,24 +5,30 @@ import javax.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import SGU.Tourio.DTO.CreateEmployeeDTO;
 import SGU.Tourio.Models.Employee;
 import SGU.Tourio.Services.EmployeeService;
 
+import java.text.ParseException;
+import java.util.Optional;
+
 @Controller
 public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
-    
+
     @GetMapping("/employee")
     public String index(Model model) {
         model.addAttribute("employees", employeeService.getAll());
         return "Employee/index";
+    }
+
+    @GetMapping("/employee/report")
+    public String report(Model model, @RequestParam("from") Optional<String> from, @RequestParam("to") Optional<String> to) throws ParseException {
+        model.addAttribute("employees", employeeService.getForTourReport(from, to));
+        return "Employee/report";
     }
 
     @GetMapping("/employee/delete/{id}")
@@ -33,7 +39,7 @@ public class EmployeeController {
 
     @GetMapping("/employee/create")
     public String createEmployee(Model model) {
-        model.addAttribute("employee", new  CreateEmployeeDTO());
+        model.addAttribute("employee", new CreateEmployeeDTO());
         return "Employee/create";
     }
 

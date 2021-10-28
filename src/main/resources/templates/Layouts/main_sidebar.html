@@ -13,9 +13,16 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link active" href="#" data-toggle="collapse" data-target="#dashboard-collapse"
+           aria-expanded="true" aria-controls="dashboard">
             <i class="fas fa-fw fa-tachometer-alt fa-fw"></i>
-            <span>Dashboard</span></a>
+            <span>Report</span></a>
+        <div id="dashboard-collapse" class="collapse show" aria-labelledby="dashboard" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" th:classappend="${page == 'employee/report' ? 'active' : ''}"
+                   href="/employee/report">Employee Report</a>
+            </div>
+        </div>
     </li>
 
     <!--    &lt;!&ndash; Divider &ndash;&gt;-->

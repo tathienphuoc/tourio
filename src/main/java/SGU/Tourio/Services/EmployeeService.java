@@ -1,10 +1,18 @@
 package SGU.Tourio.Services;
 
-import java.util.List;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.persistence.EntityExistsException;
 
+import SGU.Tourio.DTO.ReportEmployeeDTO;
+import SGU.Tourio.DTO.ViewGroupDTO;
+import SGU.Tourio.Models.Group;
+import SGU.Tourio.Models.GroupCostRel;
+import SGU.Tourio.Models.GroupEmployeeRel;
+import SGU.Tourio.Repositories.GroupEmpRelRepository;
+import SGU.Tourio.Repositories.GroupRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +27,32 @@ public class EmployeeService {
     @Autowired
     EmployeeRepository employeeRepository;
 
+    @Autowired
+    GroupEmpRelRepository groupRepository;
+
     public List<Employee> getAll() {
         return employeeRepository.findAll();
+    }
+
+    public List<ReportEmployeeDTO> getForTourReport(Optional<String> from, Optional<String> to) throws ParseException {
+        List<Employee> employees = getAll();
+        List<GroupEmployeeRel> groups;
+        if (from.isPresent() && to.isPresent()) {
+            Date fromDate = new SimpleDateFormat("yyyy-MM-dd").parse(from.get());
+            Date toDate = new SimpleDateFormat("yyyy-MM-dd").parse(to.get());
+            groups = groupRepository.findAllByGroupDateStartBetween(fromDate, toDate);
+        } else {
+            groups = groupRepository.findAll();
+        }
+
+        List<ReportEmployeeDTO> dtoList = new ArrayList<>();
+        for (Employee employee : employees) {
+            ReportEmployeeDTO dto = new ModelMapper().map(employee, ReportEmployeeDTO.class);
+            int count = groups.stream().filter(g -> Objects.equals(g.getEmployee().getId(), employee.getId())).toList().size();
+            dto.setGroupCount(count);
+            dtoList.add(dto);
+        }
+        return dtoList;
     }
 
     public Employee get(Long id) {

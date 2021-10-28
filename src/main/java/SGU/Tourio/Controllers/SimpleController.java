@@ -20,7 +20,7 @@ public class SimpleController {
 
     @GetMapping("/")
     public String homePage(Model model) {
-        return "redirect:/cost-type";
+        return "redirect:/employee/report";
     }
 
     @GetMapping("/blank")
