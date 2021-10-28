@@ -3,6 +3,7 @@ package SGU.Tourio.Services;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 
@@ -48,8 +49,9 @@ public class EmployeeService {
         List<ReportEmployeeDTO> dtoList = new ArrayList<>();
         for (Employee employee : employees) {
             ReportEmployeeDTO dto = new ModelMapper().map(employee, ReportEmployeeDTO.class);
-            int count = groups.stream().filter(g -> Objects.equals(g.getEmployee().getId(), employee.getId())).toList().size();
-            dto.setGroupCount(count);
+            List<GroupEmployeeRel> groupEmployeeRel = groups.stream().filter(g -> Objects.equals(g.getEmployee().getId(), employee.getId())).toList();
+            dto.setGroupCount(groupEmployeeRel.size());
+            dto.setJobs(String.join(", ", groupEmployeeRel.stream().map(g -> g.getJob().getName()).toList()));
             dtoList.add(dto);
         }
         return dtoList;

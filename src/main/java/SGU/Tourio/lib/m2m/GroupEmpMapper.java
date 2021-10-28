@@ -24,9 +24,6 @@ public class GroupEmpMapper extends BaseMapper<GroupEmployeeRel, Group> {
         MappedObject obj = new MappedObject(object);
         Job job = obj.getEntity(jobRepository, "job");
         Employee employee = obj.getEntity(employeeRepository, "employee");
-
-//        Optional<Job> job = jobRepository.findById(Long.parseLong(object.getString("job")));
-//        Optional<Employee> employee = employeeRepository.findById(Long.parseLong(object.getString("employee")));
         if (employee == null || job == null)
             return null;
 

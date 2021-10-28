@@ -10,6 +10,7 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Group Count</th>
+                <th>Jobs</th>
                 <th class="fit">Operations</th>
             </tr>
 
@@ -18,6 +19,7 @@
                     <td th:text="${employee.getId()}"></td>
                     <td th:text="${employee.getName()}"></td>
                     <td th:text="${employee.getGroupCount()}"></td>
+                    <td th:text="${employee.getJobs()}"></td>
                     <td class="fit">
                         <div th:replace="Layouts/update_button::btn(id=${employee.getId()}, name=${employee.getName()}, path='employee')"></div>
                         <div th:replace="Layouts/delete_button::btn (id=${employee.getId()}, name=${employee.getName()}, path='employee')"></div>
