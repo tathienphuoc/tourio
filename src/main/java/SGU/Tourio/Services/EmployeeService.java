@@ -2,25 +2,25 @@ package SGU.Tourio.Services;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 
-import SGU.Tourio.DTO.ReportEmployeeDTO;
-import SGU.Tourio.DTO.ViewGroupDTO;
-import SGU.Tourio.Models.Group;
-import SGU.Tourio.Models.GroupCostRel;
-import SGU.Tourio.Models.GroupEmployeeRel;
-import SGU.Tourio.Repositories.GroupEmpRelRepository;
-import SGU.Tourio.Repositories.GroupRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import SGU.Tourio.DTO.CreateEmployeeDTO;
+import SGU.Tourio.DTO.ReportEmployeeDTO;
 import SGU.Tourio.Models.Employee;
+import SGU.Tourio.Models.GroupEmployeeRel;
 import SGU.Tourio.Repositories.EmployeeRepository;
+import SGU.Tourio.Repositories.GroupEmpRelRepository;
 import SGU.Tourio.Utils.FormatString;
 
 @Service
@@ -49,9 +49,11 @@ public class EmployeeService {
         List<ReportEmployeeDTO> dtoList = new ArrayList<>();
         for (Employee employee : employees) {
             ReportEmployeeDTO dto = new ModelMapper().map(employee, ReportEmployeeDTO.class);
-            List<GroupEmployeeRel> groupEmployeeRel = groups.stream().filter(g -> Objects.equals(g.getEmployee().getId(), employee.getId())).toList();
+            List<GroupEmployeeRel> groupEmployeeRel = groups.stream()
+                    .filter(g -> Objects.equals(g.getEmployee().getId(), employee.getId()))
+                    .collect(Collectors.toList());
             dto.setGroupCount(groupEmployeeRel.size());
-            dto.setJobs(String.join(", ", groupEmployeeRel.stream().map(g -> g.getJob().getName()).toList()));
+            dto.setJobs(String.join(", ", groupEmployeeRel.stream().map(g -> g.getJob().getName()).collect(Collectors.toList())));
             dtoList.add(dto);
         }
         return dtoList;

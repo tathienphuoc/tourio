@@ -1,16 +1,18 @@
 package SGU.Tourio.Services;
 
-import SGU.Tourio.DTO.CreateTourTypeDTO;
-import SGU.Tourio.Models.TourType;
-import SGU.Tourio.Repositories.TourTypeRepository;
-import javassist.NotFoundException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityExistsException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
-import java.util.List;
-import java.util.Optional;
+import SGU.Tourio.DTO.CreateTourTypeDTO;
+import SGU.Tourio.Models.TourType;
+import SGU.Tourio.Repositories.TourTypeRepository;
+import javassist.NotFoundException;
 
 @Service
 public class TourTypeService {

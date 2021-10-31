@@ -1,0 +1,54 @@
+<th:block
+        th:insert="Layouts/main :: main(title='Update Tour', pageName='tour', content=~{:: .container-fluid})">
+    <div class="container-fluid form-wrap">
+        <div th:replace="Layouts/error_message :: error(${error})"></div>
+
+        <form method="post" th:action="@{/tour/update}" th:object="${tour}">
+            <input type="number" hidden th:field="*{id}">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input class="form-control" id="name" type="text" th:field="*{name}" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Description</label>
+                <textarea class="form-control" id="description" rows="5"
+                          th:field="*{description}"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="tourType">Tour Type</label>
+                <select class="form-control" th:field="*{tourTypeId}" id="tourType">
+                    <option th:each="tourType : ${tourTypes}"
+                            th:value="${tourType.getId()}"
+                            th:text="${tourType.getName()}">
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="m2m" data-m2m-caption="Locations">
+                <input name="locationData" hidden type="text"/>
+
+                <div class="m2m-field" data-m2m-type="select" data-m2m-label="Location" data-m2m-name="location">
+                    <data th:each="location : ${locations}"
+                          th:value="${location.getId()}"
+                          th:text="${location.getName()}">
+                    </data>
+                </div>
+
+                <div class="m2m-field" data-m2m-type="number" data-m2m-label="Sequence" data-m2m-name="sequence">
+                </div>
+            </div>
+            <div class="m2m" data-m2m-caption="Tour Price">
+                <input name="tourPriceData" hidden type="text"/>
+                <div class="m2m-field" data-m2m-type="number" step="0.01" data-m2m-label="Amount" data-m2m-name="amount">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a class="btn" href="/tour">Back</a>
+        </form>
+    </div>
+
+</th:block>
