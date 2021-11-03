@@ -26,28 +26,6 @@
                 </select>
             </div>
 
-            <!-- <div class="form-group">
-                <label for="dateStart">Start date</label>
-                <input class="form-control" id="dateStart" type="date" required>
-            </div>
-
-            <div class="form-group">
-                <label for="dateEnd">End date</label>
-                <input class="form-control" id="dateEnd" type="date" required>
-            </div> -->
-
-            <div class="m2m" data-m2m-caption="Start date">
-                <input name="startDateData" hidden type="text"/>
-                <div class="m2m-field" data-m2m-type="date" data-m2m-label="Start date" data-m2m-name="dateStart">
-                </div>
-            </div>
-
-            <div class="m2m" data-m2m-caption="End date">
-                <input name="endDateData" hidden type="text"/>
-                <div class="m2m-field" data-m2m-type="date" data-m2m-label="End date" data-m2m-name="dateEnd">
-                </div>
-            </div>
-
             <div class="m2m" data-m2m-caption="Locations">
                 <input name="locationData" hidden type="text"/>
 
@@ -64,7 +42,15 @@
 
             <div class="m2m" data-m2m-caption="Tour Price">
                 <input name="tourPriceData" hidden type="text"/>
-                <div class="m2m-field" data-m2m-type="number" step="0.01" data-m2m-label="Amount" data-m2m-name="amount">
+
+                <div class="m2m-field" data-m2m-type="number" step="0.01" data-m2m-label="Amount"
+                     data-m2m-name="amount">
+                </div>
+
+                <div class="m2m-field" data-m2m-type="date" data-m2m-label="Start date" data-m2m-name="dateStart">
+                </div>
+
+                <div class="m2m-field" data-m2m-type="date" data-m2m-label="End date" data-m2m-name="dateEnd">
                 </div>
             </div>
 

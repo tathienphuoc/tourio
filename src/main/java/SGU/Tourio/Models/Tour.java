@@ -31,7 +31,7 @@ public class Tour{
     @ManyToOne
     private TourType tourType;
 
-    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<TourPrice> tourPrices;
 

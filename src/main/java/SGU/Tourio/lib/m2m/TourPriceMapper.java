@@ -17,11 +17,15 @@ public class TourPriceMapper extends BaseMapper<TourPrice, Tour> {
     protected TourPrice convert(JSONObject object, Tour tour) throws JSONException, ParseException {
         MappedObject obj = new MappedObject(object);
         Float amount = obj.getFloat("amount");
-        Date dateStart = obj.getDate("startDateData");
-        Date dateEnd = obj.getDate("endDateData");
-        // if ( dateStart == null|| dateEnd == null ||  amount == null)
-        //     return null;
+        Date dateStart = obj.getDate("dateStart");
+        Date dateEnd = obj.getDate("dateEnd");
+
+        if (amount == null || dateStart == null || dateEnd == null) {
+            return null;
+        }
+
         TourPrice tourPrice = new TourPrice();
+
         tourPrice.setTour(tour);
         tourPrice.setAmount(amount);
         tourPrice.setDateStart(dateStart);
@@ -32,8 +36,9 @@ public class TourPriceMapper extends BaseMapper<TourPrice, Tour> {
     @Override
     protected JSONObject convertJson(TourPrice entity) {
         JSONObject object = new JSONObject();
-        // object.put("costType", entity.getCostType().getId().toString());
-        object.put("amount",Float.toString(entity.getAmount()));
+        object.put("amount", Float.toString(entity.getAmount()));
+        object.put("dateStart", entity.getDateStart());
+        object.put("dateEnd", entity.getDateEnd());
         return object;
     }
 }

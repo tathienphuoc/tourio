@@ -3,6 +3,7 @@ package SGU.Tourio.Controllers;
 import java.text.ParseException;
 import java.util.Optional;
 
+import SGU.Tourio.lib.m2m.TourPriceMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,12 +36,12 @@ public class TourController {
     @Autowired
     TourLocationMapper tourLocationMapper;
 
-    // @Autowired
-    // TourPriceMapper tourPriceMapper;
+    @Autowired
+    TourPriceMapper tourPriceMapper;
 
     @GetMapping("/tour")
     public String index(Model model, @RequestParam("from") Optional<String> from,
-            @RequestParam("to") Optional<String> to) throws ParseException {
+                        @RequestParam("to") Optional<String> to) throws ParseException {
         // model.addAttribute("tours", tourService.getAllForView(from, to));
         model.addAttribute("tours", tourService.getAll());
         return "Tour/index";
@@ -81,20 +82,12 @@ public class TourController {
         Tour tour = tourService.get(id);
         UpdateTourDTO dto = new ModelMapper().map(tour, UpdateTourDTO.class);
 
-        // List<Long> customerIds =
-        // group.getCustomers().stream().map(Customer::getId).collect(Collectors.toList());
-        // dto.setCustomerIds(customerIds);
-
         dto.setLocationData(tourLocationMapper.toJsonString(tour.getTourLocationRels()));
-        // dto.setCostData(tourCostMapper.toJsonString(tour.getGroupCostRels()));
-
+        dto.setTourPriceData(tourPriceMapper.toJsonString(tour.getTourPrices()));
         model.addAttribute("tour", dto);
-        // model.addAttribute("customers", customerService.getAll());
         model.addAttribute("locations", locationService.getAll());
         model.addAttribute("tourTypes", tourTypeService.getAll());
 
-        // model.addAttribute("jobs", jobService.getAll());
-        // model.addAttribute("costTypes", costTypeService.getAll());
         return "Tour/update";
     }
 

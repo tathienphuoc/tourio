@@ -28,7 +28,7 @@
             </div>
 
             <div class="m2m" data-m2m-caption="Locations">
-                <input name="locationData" hidden type="text"/>
+                <input name="locationData" hidden type="text" th:value="${tour.getLocationData()}"/>
 
                 <div class="m2m-field" data-m2m-type="select" data-m2m-label="Location" data-m2m-name="location">
                     <data th:each="location : ${locations}"
@@ -41,8 +41,16 @@
                 </div>
             </div>
             <div class="m2m" data-m2m-caption="Tour Price">
-                <input name="tourPriceData" hidden type="text"/>
-                <div class="m2m-field" data-m2m-type="number" step="0.01" data-m2m-label="Amount" data-m2m-name="amount">
+                <input name="tourPriceData" hidden type="text" th:value="${tour.getTourPriceData()}"/>
+
+                <div class="m2m-field" data-m2m-type="number" step="0.01" data-m2m-label="Amount"
+                     data-m2m-name="amount">
+                </div>
+
+                <div class="m2m-field" data-m2m-type="date" data-m2m-label="Start date" data-m2m-name="dateStart">
+                </div>
+
+                <div class="m2m-field" data-m2m-type="date" data-m2m-label="End date" data-m2m-name="dateEnd">
                 </div>
             </div>
 

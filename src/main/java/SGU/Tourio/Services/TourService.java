@@ -103,33 +103,47 @@ public class TourService {
 
         Tour tour = modelMapper.map(dto, Tour.class);
         tour.setTourType(tourTypeRepository.getById(dto.getTourTypeId()));
+
+        List<TourPrice> prices = tourPriceMapper.toEntities(dto.getTourPriceData(), tour);
+        System.out.println(prices);
+        tour.setTourPrices(prices);
+
+
         Tour created = tourRepository.save(tour);
+        System.out.println(created);
 
         List<TourLocationRel> locations = tourLocationMapper.toEntities(dto.getLocationData(), created);
         tourLocationRelRepository.saveAll(locations);
-        
-        List<TourPrice> prices = tourPriceMapper.toEntities(dto.getTourPriceData(), created);
-        tourPriceRepository.saveAll(prices);
+
+
         return created;
     }
 
     public Tour update(UpdateTourDTO dto) throws Exception {
         Optional<Tour> existed = tourRepository.findById(dto.getId());
 
+        System.out.println(dto);
+
         if (!existed.isPresent()) {
             throw new NotFoundException("Not Existed");
         }
         Tour tour = new ModelMapper().map(dto, Tour.class);
 
+        List<TourPrice> prices = tourPriceMapper.toEntities(dto.getTourPriceData(), tour);
+        tour.setTourPrices(prices);
+
+        tourLocationRelRepository.deleteAll(existed.get().getTourLocationRels());
         tourPriceRepository.deleteAll(existed.get().getTourPrices());
 
-        List<TourPrice> prices = tourPriceMapper.toEntities(dto.getTourPriceData(), tour);
+        List<TourLocationRel> locations = tourLocationMapper.toEntities(dto.getLocationData(), tour);
         try {
-            tourPriceRepository.saveAll(prices);
+
+            tourLocationRelRepository.saveAll(locations);
         } catch (Exception e) {
-            tourPriceRepository.saveAll(existed.get().getTourPrices());
+            tourLocationRelRepository.saveAll(existed.get().getTourLocationRels());
             throw e;
         }
+        System.out.println(tour);
         return tourRepository.save(tour);
     }
 
