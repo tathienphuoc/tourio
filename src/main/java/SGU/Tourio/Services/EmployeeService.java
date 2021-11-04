@@ -53,7 +53,7 @@ public class EmployeeService {
                     .filter(g -> Objects.equals(g.getEmployee().getId(), employee.getId()))
                     .collect(Collectors.toList());
             dto.setGroupCount(groupEmployeeRel.size());
-            dto.setJobs(String.join(", ", groupEmployeeRel.stream().map(g -> g.getJob().getName()).collect(Collectors.toList())));
+            dto.setJobs(String.join(", ", groupEmployeeRel.stream().map(g -> g.getJob().getName()).collect(Collectors.toSet())));
             dtoList.add(dto);
         }
         return dtoList;
