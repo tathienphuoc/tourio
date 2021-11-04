@@ -3,16 +3,9 @@ package SGU.Tourio.Models;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
@@ -31,7 +24,9 @@ public class Group {
     private Long id;
 
     private String name;
+
     private Long tourPrice;
+
     private String description;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -41,6 +36,9 @@ public class Group {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateEnd;
+
+    @ManyToOne
+    private Tour tour;
 
     @ManyToMany
     private List<Customer> customers;
@@ -52,4 +50,15 @@ public class Group {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<GroupCostRel> groupCostRels;
+
+    private Date createdAt;
+
+    public Long getTotalCost() {
+        return this.getGroupCostRels().stream().map(GroupCostRel::getAmount).reduce(0L, Long::sum);
+    }
+
+    public Long getTotalSale() {
+        return this.getCustomers().size() * this.getTourPrice();
+    }
+
 }

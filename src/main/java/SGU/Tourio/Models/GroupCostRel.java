@@ -29,7 +29,7 @@ public class GroupCostRel implements Serializable {
     private Long amount;
 
     public GroupCostRel(Group group, CostType costType, Long amount) {
-        this.id = new GroupCostRelID(group.getId(), costType.getId());
+        this.id = new GroupCostRelID(costType.getId(), group.getId());
         this.group = group;
         this.costType = costType;
         this.amount = amount;

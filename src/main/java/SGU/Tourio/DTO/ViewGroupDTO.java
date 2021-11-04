@@ -14,6 +14,8 @@ import java.util.Set;
 public class ViewGroupDTO {
     private Long id;
 
+    private String tourName;
+
     private String name;
 
     private Long tourPrice;
@@ -24,9 +26,5 @@ public class ViewGroupDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateEnd;
 
-    private Integer customerCount;
-
-    private Integer employeeCount;
-
-    private Long costTotal;
+    private Date createdAt;
 }

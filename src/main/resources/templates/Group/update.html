@@ -8,6 +8,16 @@
             <input type="number" hidden th:field="*{id}">
 
             <div class="form-group">
+                <label for="tour">Tour</label>
+                <select class="form-control" th:field="*{tourId}" id="tour" required>
+                    <option th:each="tour : ${tours}"
+                            th:value="${tour.getId()}"
+                            th:text="${tour.getId() + ' - ' + tour.getName()}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="name">Name</label>
                 <input class="form-control" id="name" type="text" th:field="*{name}" required autofocus>
             </div>
@@ -32,7 +42,7 @@
                 <label for="customers">Customers</label>
                 <select class="form-control multiple-select" name="customerIds" id="customers" multiple>
                     <option th:each="c : ${customers}"
-                            th:selected="${!group.getCustomerIds().isEmpty() && group.getCustomerIds().contains(c.getId())}"
+                            th:selected="${group.getCustomerIds() != null && group.getCustomerIds().contains(c.getId())}"
                             th:value="${c.getId()}"
                             th:text="${c.getName()}">
                     </option>

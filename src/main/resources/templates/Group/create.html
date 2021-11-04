@@ -5,6 +5,17 @@
 
         <form method="post" th:action="@{/group/create}" th:object="${group}">
             <div class="form-group">
+                <label for="tour">Tour</label>
+                <select class="form-control" th:field="*{tourId}" id="tour" required>
+                    <option th:each="tour : ${tours}"
+                            th:value="${tour.getId()}"
+                            th:text="${tour.getId() + ' - ' + tour.getName()}">
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="name">Name</label>
                 <input class="form-control" id="name" type="text" th:field="*{name}" required autofocus>
             </div>

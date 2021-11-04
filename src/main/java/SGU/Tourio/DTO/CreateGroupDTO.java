@@ -18,6 +18,8 @@ public class CreateGroupDTO {
 
     private String description;
 
+    private Long tourId;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateStart;
 

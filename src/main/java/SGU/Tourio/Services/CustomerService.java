@@ -5,7 +5,10 @@ import java.util.Optional;
 
 import javax.persistence.EntityExistsException;
 
+import SGU.Tourio.DTO.CreateTourPriceDTO;
+import SGU.Tourio.Models.TourPrice;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +33,14 @@ public class CustomerService {
 
     public Customer create(CreateCustomerDTO dto) throws EntityExistsException {
         System.out.println(dto);
-        Customer customer = new ModelMapper().map(dto, Customer.class);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addMappings(new PropertyMap<CreateCustomerDTO, Customer>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        Customer customer = modelMapper.map(dto, Customer.class);
         return customerRepository.save(customer);
     }
 

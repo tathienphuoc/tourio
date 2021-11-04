@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,10 +47,19 @@ public class GroupController {
     @Autowired
     GroupCostMapper groupCostMapper;
 
+    @Autowired
+    TourService tourService;
+
     @GetMapping("/group")
     public String index(Model model, @RequestParam("from") Optional<String> from, @RequestParam("to") Optional<String> to) throws ParseException {
         model.addAttribute("groups", groupService.getAllForView(from, to));
         return "Group/index";
+    }
+
+    @GetMapping("/group/report")
+    public String report(Model model, @RequestParam("from") Optional<String> from, @RequestParam("to") Optional<String> to) throws ParseException {
+        model.addAttribute("groups", groupService.getForReport(from, to));
+        return "Group/report";
     }
 
     @GetMapping("/group/delete/{id}")
@@ -61,10 +71,7 @@ public class GroupController {
     @GetMapping("/group/create")
     public String createGroup(Model model) {
         model.addAttribute("group", new CreateGroupDTO());
-        model.addAttribute("customers", customerService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("jobs", jobService.getAll());
-        model.addAttribute("costTypes", costTypeService.getAll());
+        setupData(model);
         return "Group/create";
     }
 
@@ -75,10 +82,7 @@ public class GroupController {
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("group", dto);
-            model.addAttribute("customers", customerService.getAll());
-            model.addAttribute("employees", employeeService.getAll());
-            model.addAttribute("jobs", jobService.getAll());
-            model.addAttribute("costTypes", costTypeService.getAll());
+            setupData(model);
             return "Group/create";
         }
         return "redirect:/group";
@@ -96,10 +100,7 @@ public class GroupController {
         dto.setCostData(groupCostMapper.toJsonString(group.getGroupCostRels()));
 
         model.addAttribute("group", dto);
-        model.addAttribute("customers", customerService.getAll());
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("jobs", jobService.getAll());
-        model.addAttribute("costTypes", costTypeService.getAll());
+        setupData(model);
         return "Group/update";
     }
 
@@ -108,13 +109,19 @@ public class GroupController {
         try {
             groupService.update(dto);
         } catch (Exception e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("customers", customerService.getAll());
-            model.addAttribute("employees", employeeService.getAll());
-            model.addAttribute("jobs", jobService.getAll());
-            model.addAttribute("costTypes", costTypeService.getAll());
+            setupData(model);
             return "Group/update";
         }
         return "redirect:/group";
+    }
+
+    private void setupData(Model model) {
+        model.addAttribute("tours", tourService.getAll());
+        model.addAttribute("customers", customerService.getAll());
+        model.addAttribute("employees", employeeService.getAll());
+        model.addAttribute("jobs", jobService.getAll());
+        model.addAttribute("costTypes", costTypeService.getAll());
     }
 }

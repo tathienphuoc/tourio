@@ -1,10 +1,13 @@
 package SGU.Tourio.Services;
 
 import SGU.Tourio.DTO.CreateCostTypeDTO;
+import SGU.Tourio.DTO.CreateCustomerDTO;
 import SGU.Tourio.Models.CostType;
+import SGU.Tourio.Models.Customer;
 import SGU.Tourio.Repositories.CostTypeRepository;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +30,14 @@ public class CostTypeService {
     }
 
     public CostType create(CreateCostTypeDTO dto) throws EntityExistsException {
-        CostType costType = new ModelMapper().map(dto, CostType.class);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addMappings(new PropertyMap<CreateCostTypeDTO, CostType>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        CostType costType = modelMapper.map(dto, CostType.class);
         return costTypeRepository.save(costType);
     }
 

@@ -1,25 +1,24 @@
 package SGU.Tourio.DTO;
 
+import SGU.Tourio.Models.TourType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateGroupDTO {
+public class ReportGroupDTO {
     private Long id;
+
+    private String tourName;
 
     private String name;
 
-    private Long tourId;
-
-    private String description;
+    private Long tourPrice;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateStart;
@@ -27,9 +26,15 @@ public class UpdateGroupDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateEnd;
 
-    private List<Long> customerIds;
+    private Integer customerCount;
 
-    private String employeeData;
+    private Integer employeeCount;
 
-    private String costData;
+    private Long totalCost;
+
+    private Long totalSale;
+
+    private int revenue;
+
+    private Date createdAt;
 }

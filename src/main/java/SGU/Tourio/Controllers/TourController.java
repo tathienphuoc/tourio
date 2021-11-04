@@ -40,11 +40,16 @@ public class TourController {
     TourPriceMapper tourPriceMapper;
 
     @GetMapping("/tour")
-    public String index(Model model, @RequestParam("from") Optional<String> from,
-                        @RequestParam("to") Optional<String> to) throws ParseException {
-        // model.addAttribute("tours", tourService.getAllForView(from, to));
+    public String index(Model model) throws ParseException {
         model.addAttribute("tours", tourService.getAll());
         return "Tour/index";
+    }
+
+    @GetMapping("/tour/report")
+    public String index(Model model, @RequestParam("from") Optional<String> from,
+                        @RequestParam("to") Optional<String> to) throws ParseException {
+        model.addAttribute("tours", tourService.getForSaleReport(from, to));
+        return "Tour/report";
     }
 
     @GetMapping("/tour/delete/{id}")

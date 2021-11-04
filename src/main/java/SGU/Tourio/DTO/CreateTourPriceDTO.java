@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class CreateTourPriceDTO {
     private Long tourId;
 
-    private Float amount;
+    private Long amount;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateStart;

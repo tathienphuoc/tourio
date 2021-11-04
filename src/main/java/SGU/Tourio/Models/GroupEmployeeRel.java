@@ -30,7 +30,7 @@ public class GroupEmployeeRel implements Serializable {
     private Job job;
 
     public GroupEmployeeRel(Group group, Employee employee, Job job) {
-        this.id = new GroupEmployeeRelID(group.getId(), employee.getId());
+        this.id = new GroupEmployeeRelID(employee.getId(), group.getId());
         this.group = group;
         this.employee = employee;
         this.job = job;

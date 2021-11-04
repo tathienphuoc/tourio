@@ -1,8 +1,7 @@
-<th:block th:insert="Layouts/main :: main(title='Tour', pageName='tour', content=~{:: .container-fluid})">
+<th:block th:insert="Layouts/main :: main(title='Tour', pageName='tour/report', content=~{:: .container-fluid})">
     <div class="container-fluid">
-        <div class="row">
-            <div th:replace="Layouts/create_button::btn('Tour', 'tour')"></div>
-
+        <div class="row mb-3">
+            <div class="offset-6"></div>
             <div th:replace="Layouts/date_range::inp"></div>
         </div>
 
@@ -10,20 +9,21 @@
             <tr id="th">
                 <th>ID</th>
                 <th>Name</th>
-                <th>Description</th>
                 <th>Tour Type</th>
-                <th class="fit">Operations</th>
+                <th>Group Count</th>
+                <th>Total Sale</th>
+                <th>Total Cost</th>
+                <th>Revenue</th>
             </tr>
             <th:tbody id="tb" th:each="tour : ${tours}">
                 <tr>
                     <td th:text="${tour.getId()}"></td>
                     <td th:text="${tour.getName()}"></td>
-                    <td th:text="${tour.getDescription()}"></td>
                     <td th:text="${tour.getTourType().getName()}"></td>
-                    <td class="fit">
-                        <div th:replace="Layouts/update_button::btn(id=${tour.getId()}, name=${tour.getName()}, path='tour')"></div>
-                        <div th:replace="Layouts/delete_button::btn (id=${tour.getId()}, name=${tour.getName()}, path='tour')"></div>
-                    </td>
+                    <td th:text="${tour.getGroupCount()}"></td>
+                    <td th:text="${#numbers.formatCurrency(tour.getTotalSale())}"></td>
+                    <td th:text="${#numbers.formatCurrency(tour.getTotalCost())}"></td>
+                    <td th:text="${tour.getRevenue() + '%'}"></td>
                 </tr>
             </th:tbody>
         </th:block>

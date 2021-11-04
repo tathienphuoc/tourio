@@ -1,8 +1,15 @@
 package SGU.Tourio.Services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import SGU.Tourio.DTO.ReportTourDTO;
+import SGU.Tourio.Models.Group;
+import SGU.Tourio.Repositories.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +20,6 @@ import SGU.Tourio.DTO.UpdateTourDTO;
 import SGU.Tourio.Models.Tour;
 import SGU.Tourio.Models.TourLocationRel;
 import SGU.Tourio.Models.TourPrice;
-import SGU.Tourio.Repositories.CustomerRepository;
-import SGU.Tourio.Repositories.TourLocationRelRepository;
-import SGU.Tourio.Repositories.TourPriceRepository;
-import SGU.Tourio.Repositories.TourRepository;
-import SGU.Tourio.Repositories.TourTypeRepository;
 import SGU.Tourio.Utils.FormatString;
 import SGU.Tourio.lib.m2m.TourLocationMapper;
 import SGU.Tourio.lib.m2m.TourPriceMapper;
@@ -49,35 +51,42 @@ public class TourService {
     @Autowired
     TourTypeRepository tourTypeRepository;
 
+    @Autowired
+    GroupRepository groupRepository;
+
     // @Autowired
     // TourPriceMapper tourPriceMapper;
 
     public List<Tour> getAll() {
-        Tour t=new Tour();
+        Tour t = new Tour();
         return tourRepository.findAll();
     }
 
-    // public List<ViewTourDTO> getAllForView(Optional<String> from, Optional<String> to) throws ParseException {
-    //     List<Tour> tours;
-
-    //     if (from.isPresent() && to.isPresent()) {
-    //         Date fromDate = new SimpleDateFormat("yyyy-MM-dd").parse(from.get());
-    //         Date toDate = new SimpleDateFormat("yyyy-MM-dd").parse(to.get());
-    //         tours = tourRepository.findAllByDateStartBetween(fromDate, toDate);
-    //     } else {
-    //         tours = getAll();
-    //     }
-
-    //     List<ViewTourDTO> dtoList = new ArrayList<>();
-    //     for (Tour tour : tours) {
-    //         ViewTourDTO dto = new ModelMapper().map(tour, ViewTourDTO.class);
-    //         dto.setCustomerCount(tour.getCustomers().size());
-    //         dto.setEmployeeCount(tour.getTourEmployeeRels().size());
-    //         dto.setPriceTotal(tour.getTourPriceRels().stream().map(TourPriceRel::getAmount).reduce(0L, Long::sum));
-    //         dtoList.add(dto);
-    //     }
-    //     return dtoList;
-    // }
+    public List<ReportTourDTO> getForSaleReport(Optional<String> from, Optional<String> to) throws ParseException {
+        List<Tour> tours = getAll();
+        List<ReportTourDTO> dtoList = new ArrayList<>();
+        for (Tour tour : tours) {
+            ReportTourDTO dto = new ModelMapper().map(tour, ReportTourDTO.class);
+            List<Group> groups;
+            if (from.isPresent() && to.isPresent()) {
+                Date fromDate = new SimpleDateFormat("yyyy-MM-dd").parse(from.get());
+                Date toDate = new SimpleDateFormat("yyyy-MM-dd").parse(to.get());
+                groups = groupRepository.findAllByTourAndCreatedAtBetween(tour, fromDate, toDate);
+            } else {
+                groups = groupRepository.findAllByTour(tour);
+            }
+            dto.setTotalSale(groups.stream().map(Group::getTotalSale).reduce(0L, Long::sum));
+            dto.setTotalCost(groups.stream().map(Group::getTotalCost).reduce(0L, Long::sum));
+            float revenue = 0;
+            if (dto.getTotalSale() > 0) {
+                revenue = (dto.getTotalSale() - dto.getTotalCost()) / (float) (dto.getTotalSale());
+            }
+            dto.setRevenue((int) (revenue * 100));
+            dto.setGroupCount(groups.size());
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
 
     public Tour get(Long id) {
         if (id == null)
@@ -105,7 +114,11 @@ public class TourService {
         tour.setTourType(tourTypeRepository.getById(dto.getTourTypeId()));
 
         List<TourPrice> prices = tourPriceMapper.toEntities(dto.getTourPriceData(), tour);
-        System.out.println(prices);
+        for (TourPrice price : prices) {
+            if (price.getDateStart().after(price.getDateEnd())) {
+                throw new Exception("Start date must before end date");
+            }
+        }
         tour.setTourPrices(prices);
 
 
@@ -130,10 +143,17 @@ public class TourService {
         Tour tour = new ModelMapper().map(dto, Tour.class);
 
         List<TourPrice> prices = tourPriceMapper.toEntities(dto.getTourPriceData(), tour);
+        for (TourPrice price : prices) {
+            if (price.getDateStart().after(price.getDateEnd())) {
+                throw new Exception("Start date must before end date");
+            }
+        }
         tour.setTourPrices(prices);
 
-        tourLocationRelRepository.deleteAll(existed.get().getTourLocationRels());
-        tourPriceRepository.deleteAll(existed.get().getTourPrices());
+        if (existed.get().getTourLocationRels() != null)
+            tourLocationRelRepository.deleteAll(existed.get().getTourLocationRels());
+        if (existed.get().getTourPrices() != null)
+            tourPriceRepository.deleteAll(existed.get().getTourPrices());
 
         List<TourLocationRel> locations = tourLocationMapper.toEntities(dto.getLocationData(), tour);
         try {

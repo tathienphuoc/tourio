@@ -38,7 +38,7 @@ public class TourPrice {
     @Temporal(TemporalType.DATE)
     private Date dateEnd;
 
-    private float amount;
+    private Long amount;
 
 
 }
