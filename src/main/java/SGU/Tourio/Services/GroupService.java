@@ -160,10 +160,13 @@ public class GroupService {
 
         groupEmpRelRepository.deleteAll(existed.get().getGroupEmployeeRels());
         groupCostRelRepository.deleteAll(existed.get().getGroupCostRels());
+
+        Group updated = groupRepository.save(group);
         groupCostRelRepository.flush();
         groupEmpRelRepository.flush();
-        List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), group);
-        List<GroupCostRel> costs = groupCostMapper.toEntities(dto.getCostData(), group);
+
+        List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), updated);
+        List<GroupCostRel> costs = groupCostMapper.toEntities(dto.getCostData(), updated);
         try {
             groupEmpRelRepository.saveAll(employees);
             groupCostRelRepository.saveAll(costs);
@@ -172,7 +175,7 @@ public class GroupService {
             groupCostRelRepository.saveAll(existed.get().getGroupCostRels());
             throw e;
         }
-        return groupRepository.save(group);
+        return updated;
     }
 
     public void delete(Long id) {
