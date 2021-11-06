@@ -61,17 +61,19 @@ function buildCell(def, value, id) {
  *
  * @param defs {[{label: string, type: string, name: string, data: [{value: string, text: string}]}]}
  * @param value {Object}
- * @param id {string}
+ * @param name {string}
+ * @param index {number}
  */
-function buildRow(defs, value, id) {
-    let cells = defs.map((d, i) => buildCell(d, value[d.name] || '', id + '-' + d.name))
+function buildRow(defs, value, name, index) {
+    const rowId = name + '-' + index
+    let cells = defs.map((d) => buildCell(d, value[d.name] || '', rowId + '-' + d.name))
     cells.push(`
         <td class="fit">
-            <a data-m2m-id="${id}" class="m2m-remove-btn btn btn-danger btn-circle">
+            <a data-m2m-id="${rowId}" class="m2m-remove-btn-${name} btn btn-danger btn-circle">
                <i class="fas fa-trash"></i></a>
-        </td>
+        </td> 
     `)
-    return `<tr id="${id}">${cells}</tr>`
+    return `<tr id="${rowId}">${cells}</tr>`
 }
 
 /**
@@ -93,13 +95,13 @@ function encode(data) {
     return JSON.stringify(data)
 }
 
-function updateRemoveEvent(sourceData, input) {
-    const removeBtn = $('.m2m-remove-btn')
+function updateRemoveEvent(sourceData, input, name) {
+    const removeBtn = $(`.m2m-remove-btn-${name}`)
     removeBtn.off('click')
     removeBtn.click(function () {
         const id = $(this).data('m2m-id')
         sourceData[+id.split('-')[1]] = {}
-        $(`#${id}`).hide()
+        $(`#${id}`).remove()
         input.val(encode(sourceData))
     })
 }
@@ -126,10 +128,10 @@ function build(target) {
     const sourceData = decode(input.val())
     const name = input.attr('name')
     const title = $(target).data('m2m-caption')
-
     const caption = $(`<h4>${title}</h4>`)
     const table = $(`<table class='table m2m-table table-bordered'></table>`)
-    const body = $(`<tbody>${sourceData.map((value, index) => buildRow(defs, value, name + '-' + index))}</tbody>`)
+    let index = 0;
+    const body = $(`<tbody>${sourceData.map((value) => buildRow(defs, value, name, index++))}</tbody>`)
     const addBtn = $(`<a class="btn btn-link"><i class="fas fa-plus"/> Add new line</a>`)
 
     table.append(buildHeadings(defs))
@@ -139,13 +141,13 @@ function build(target) {
     table.before(caption)
 
     addBtn.click(function () {
-        body.append(buildRow(defs, {}, name + '-' + sourceData.length))
+        body.append(buildRow(defs, {}, name, index++))
         sourceData.push({})
-        updateRemoveEvent(sourceData, input)
+        updateRemoveEvent(sourceData, input, name)
         updateEditEvent(sourceData, input, name)
     })
 
-    updateRemoveEvent(sourceData, input)
+    updateRemoveEvent(sourceData, input, name)
     updateEditEvent(sourceData, input, name)
 }
 
