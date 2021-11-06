@@ -19,5 +19,5 @@ public class TourLocationRelID implements Serializable {
     private Long tourId;
 
     @Column(name = "location_id")
-    private Long LocationId;
+    private Long locationId;
 }

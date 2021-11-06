@@ -135,37 +135,22 @@ public class TourService {
     public Tour update(UpdateTourDTO dto) throws Exception {
         Optional<Tour> existed = tourRepository.findById(dto.getId());
 
-        System.out.println(dto);
-
         if (!existed.isPresent()) {
             throw new NotFoundException("Not Existed");
         }
         Tour tour = new ModelMapper().map(dto, Tour.class);
 
         List<TourPrice> prices = tourPriceMapper.toEntities(dto.getTourPriceData(), tour);
+        List<TourLocationRel> locations = tourLocationMapper.toEntities(dto.getLocationData(), tour);
 
         for (TourPrice price : prices) {
             if (price.getDateStart().after(price.getDateEnd())) {
                 throw new Exception("Start date must before end date");
             }
         }
-
         tour.setTourPrices(prices);
-
-        tourLocationRelRepository.deleteAll(existed.get().getTourLocationRels());
-
-        Tour updated = tourRepository.save(tour);
-        tourLocationRelRepository.flush();
-        tourPriceRepository.flush();
-
-        List<TourLocationRel> locations = tourLocationMapper.toEntities(dto.getLocationData(), tour);
-        try {
-            tourLocationRelRepository.saveAll(locations);
-        } catch (Exception e) {
-            tourLocationRelRepository.saveAll(existed.get().getTourLocationRels());
-            throw e;
-        }
-        return updated;
+        tour.setTourLocationRels(locations);
+        return tourRepository.save(tour);
     }
 
     public void delete(Long id) {
