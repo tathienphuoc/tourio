@@ -39,22 +39,36 @@ function buildCell(def, value, id) {
     const [fieldName] = id.split('-')
     if (def.type === 'select') {
         const options = def.data.map(d => `<option ${d.value === value.toString() ? 'selected' : ''} value="${d.value}">${d.text}</option>`).join()
-        cell = `
+        return `<td>
             <div class="form-group">
                 <select data-m2m-id="${id}" class="m2m-input-${fieldName} form-control">
                     <option disabled selected value> -- select an option -- </option>
                     ${options}
                 </select>
             </div>
-        `
-    } else {
-        cell = `
+        </td>`
+    }
+    if (def.type === 'sequence') {
+        return `<td class="fit">
+            <div class="form-group">
+                <input data-m2m-id="${id}" 
+                       disabled width="70" class="m2m-input-${fieldName} form-control m2m-sequence" 
+                       type="number" value="${value}"/>
+                <a data-m2m-id="${id}" class="m2m-seq-up-btn-${fieldName} btn btn-info btn-circle">
+                   <i class="fas fa-arrow-up"></i></a>
+                <a data-m2m-id="${id}" class="m2m-seq-down-btn-${fieldName} btn btn-info btn-circle">
+                   <i class="fas fa-arrow-down"></i></a>
+            </div>
+        </td>`
+    }
+
+    return `
+        <td>
             <div class="form-group">
                 <input data-m2m-id="${id}" class="m2m-input-${fieldName} form-control" type="${def.type}" value="${value}"/>
             </div>
-        `
-    }
-    return `<td>${cell}</td>`
+        </td>
+    `
 }
 
 /**
@@ -85,54 +99,25 @@ function decode(val) {
     return val !== '' ? JSON.parse(val) : []
 }
 
-/**
- *
- * @param data {[Object]}
- * @return {string}
- */
-function encode(data) {
-    console.log(JSON.stringify(data))
-    return JSON.stringify(data)
-}
-
-function updateRemoveEvent(sourceData, input, name) {
-    const removeBtn = $(`.m2m-remove-btn-${name}`)
-    removeBtn.off('click')
-    removeBtn.click(function () {
-        const id = $(this).data('m2m-id')
-        sourceData[+id.split('-')[1]] = {}
-        $(`#${id}`).remove()
-        input.val(encode(sourceData))
-    })
-}
-
-/**
- *
- * @param sourceData {[Object]}
- * @param input
- * @param name {string}
- */
-function updateEditEvent(sourceData, input, name) {
-    const inputField = $(`.m2m-input-${name}`)
-    inputField.off('input')
-    inputField.on('input', function () {
-        const [, rowId, colName] = $(this).data('m2m-id').split('-')
-        sourceData[+rowId][colName] = $(this).val().toString()
-        input.val(encode(sourceData))
-    })
-}
 
 function build(target) {
     const input = $(target).children('input')
     const defs = $(target).children('.m2m-field').map(getFieldDef).get()
-    const sourceData = decode(input.val())
+    const sourceData = defs.some(d => d.type === 'sequence')
+        ? decode(input.val()).sort((a, b) => +a['sequence'] - +b['sequence'])
+        : decode(input.val())
+
     const name = input.attr('name')
     const title = $(target).data('m2m-caption')
     const caption = $(`<h4>${title}</h4>`)
     const table = $(`<table class='table m2m-table table-bordered'></table>`)
+
     let index = 0;
-    const body = $(`<tbody>${sourceData.map((value) => buildRow(defs, value, name, index++))}</tbody>`)
+    const rows = sourceData.map((value) => buildRow(defs, value, name, index++))
+    const body = $(`<tbody>${rows}</tbody>`)
     const addBtn = $(`<a class="btn btn-link"><i class="fas fa-plus"/> Add new line</a>`)
+
+    const m2mEvent = new M2mEvent(sourceData, input, name)
 
     table.append(buildHeadings(defs))
     table.append(body)
@@ -143,12 +128,9 @@ function build(target) {
     addBtn.click(function () {
         body.append(buildRow(defs, {}, name, index++))
         sourceData.push({})
-        updateRemoveEvent(sourceData, input, name)
-        updateEditEvent(sourceData, input, name)
+        m2mEvent.updateEvents()
     })
-
-    updateRemoveEvent(sourceData, input, name)
-    updateEditEvent(sourceData, input, name)
+    m2mEvent.updateEvents()
 }
 
 $(document).ready(function () {

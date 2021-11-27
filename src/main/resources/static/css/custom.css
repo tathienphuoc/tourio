@@ -1,7 +1,11 @@
-.table td.fit,
-.table th.fit {
+.fit {
     white-space: nowrap;
     width: 1%;
+}
+
+.m2m-sequence {
+    width: 70px;
+    display: inline-block;
 }
 
 .form-wrap {
