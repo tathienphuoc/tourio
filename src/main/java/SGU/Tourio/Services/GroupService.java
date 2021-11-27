@@ -158,24 +158,13 @@ public class GroupService {
             group.setCustomers(customers);
         }
 
-        groupEmpRelRepository.deleteAll(existed.get().getGroupEmployeeRels());
-        groupCostRelRepository.deleteAll(existed.get().getGroupCostRels());
+        List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), group);
+        List<GroupCostRel> costs = groupCostMapper.toEntities(dto.getCostData(), group);
 
-        Group updated = groupRepository.save(group);
-        groupCostRelRepository.flush();
-        groupEmpRelRepository.flush();
+        group.setGroupCostRels(costs);
+        group.setGroupEmployeeRels(employees);
 
-        List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), updated);
-        List<GroupCostRel> costs = groupCostMapper.toEntities(dto.getCostData(), updated);
-        try {
-            groupEmpRelRepository.saveAll(employees);
-            groupCostRelRepository.saveAll(costs);
-        } catch (Exception e) {
-            groupEmpRelRepository.saveAll(existed.get().getGroupEmployeeRels());
-            groupCostRelRepository.saveAll(existed.get().getGroupCostRels());
-            throw e;
-        }
-        return updated;
+        return groupRepository.save(group);
     }
 
     public void delete(Long id) {

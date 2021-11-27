@@ -43,11 +43,11 @@ public class Group {
     @ManyToMany
     private List<Customer> customers;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<GroupEmployeeRel> groupEmployeeRels;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<GroupCostRel> groupCostRels;
 
