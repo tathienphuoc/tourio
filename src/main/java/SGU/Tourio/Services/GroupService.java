@@ -118,8 +118,7 @@ public class GroupService {
 
         Tour tour = tourRepository.getById(dto.getTourId());
         group.setTour(tour);
-        group.setTourPrice(tour.getCurrentPrice());
-
+        group.setTourPrice(tour.getPriceByDate(group.getDateStart()));
 
         List<Customer> customers = customerRepository.findAllById(dto.getCustomerIds());
         group.setCustomers(customers);
@@ -149,9 +148,11 @@ public class GroupService {
         }
 
         group.setCreatedAt(existed.get().getCreatedAt());
-        group.setTourPrice(existed.get().getTourPrice());
 
-        group.setTour(tourRepository.getById(dto.getTourId()));
+        Tour tour = tourRepository.getById(dto.getTourId());
+
+        group.setTour(tour);
+        group.setTourPrice(tour.getPriceByDate(group.getDateStart()));
 
         if (dto.getCustomerIds() != null) {
             List<Customer> customers = customerRepository.findAllById(dto.getCustomerIds());

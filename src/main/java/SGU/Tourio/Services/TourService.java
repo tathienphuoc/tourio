@@ -125,7 +125,6 @@ public class TourService {
         tour.setTourPrices(prices);
 
         Tour created = tourRepository.save(tour);
-        System.out.println(created);
 
         List<TourLocationRel> locations = tourLocationMapper.toEntities(dto.getLocationData(), created);
         tourLocationRelRepository.saveAll(locations);
@@ -138,7 +137,7 @@ public class TourService {
         List<TourPrice> sortedByStartDate = prices.stream().sorted(Comparator.comparing(TourPrice::getDateStart)).collect(Collectors.toList());
         Date lastEnd = null;
         for (TourPrice item : sortedByStartDate) {
-            if (lastEnd != null && lastEnd.after(item.getDateStart())) {
+            if (lastEnd != null && (lastEnd.after(item.getDateStart()) || lastEnd.equals(item.getDateStart()))) {
                 return true;
             }
             lastEnd = item.getDateEnd();

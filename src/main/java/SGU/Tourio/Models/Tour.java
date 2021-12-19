@@ -41,9 +41,8 @@ public class Tour {
     @ToString.Exclude
     private List<Group> groups;
 
-    public Long getCurrentPrice() throws Exception {
-        Date today = new Date();
-        Optional<TourPrice> currentPrice = this.getTourPrices().stream().filter(p -> today.before(p.getDateEnd()) && today.after(p.getDateStart())).findFirst();
+    public Long getPriceByDate(Date date) throws Exception {
+        Optional<TourPrice> currentPrice = this.getTourPrices().stream().filter(p -> (date.equals(p.getDateEnd()) || date.before(p.getDateEnd())) && (date.after(p.getDateStart()) || date.equals(p.getDateStart()))).findFirst();
         if (!currentPrice.isPresent()) {
             throw new Exception("No price has been defined on Tour for this period");
         }
