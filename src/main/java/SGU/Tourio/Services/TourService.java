@@ -2,10 +2,8 @@ package SGU.Tourio.Services;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import SGU.Tourio.DTO.ReportTourDTO;
 import SGU.Tourio.Models.Group;
@@ -119,8 +117,12 @@ public class TourService {
                 throw new Exception("Start date must before end date");
             }
         }
-        tour.setTourPrices(prices);
 
+        if (existOverlap(prices)) {
+            throw new Exception("Price date range can not overlap");
+        }
+
+        tour.setTourPrices(prices);
 
         Tour created = tourRepository.save(tour);
         System.out.println(created);
@@ -130,6 +132,18 @@ public class TourService {
 
 
         return created;
+    }
+
+    private boolean existOverlap(List<TourPrice> prices) {
+        List<TourPrice> sortedByStartDate = prices.stream().sorted(Comparator.comparing(TourPrice::getDateStart)).collect(Collectors.toList());
+        Date lastEnd = null;
+        for (TourPrice item : sortedByStartDate) {
+            if (lastEnd != null && lastEnd.after(item.getDateStart())) {
+                return true;
+            }
+            lastEnd = item.getDateEnd();
+        }
+        return false;
     }
 
     public Tour update(UpdateTourDTO dto) throws Exception {
@@ -148,6 +162,11 @@ public class TourService {
                 throw new Exception("Start date must before end date");
             }
         }
+
+        if (existOverlap(prices)) {
+            throw new Exception("Price date range can not overlap");
+        }
+
         tour.setTourPrices(prices);
         tour.setTourLocationRels(locations);
         return tourRepository.save(tour);
