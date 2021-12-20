@@ -14,10 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GroupService {
@@ -123,15 +120,18 @@ public class GroupService {
         List<Customer> customers = customerRepository.findAllById(dto.getCustomerIds());
         group.setCustomers(customers);
 
-        Group created = groupRepository.save(group);
 
-        List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), created);
-        groupEmpRelRepository.saveAll(employees);
+        List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), group);
+        List<GroupCostRel> costs = groupCostMapper.toEntities(dto.getCostData(), group);
 
-        List<GroupCostRel> costs = groupCostMapper.toEntities(dto.getCostData(), created);
-        groupCostRelRepository.saveAll(costs);
+        if (duplicatedEmployee(employees)) {
+            throw new Exception("Duplicated employee!");
+        }
 
-        return created;
+        group.setGroupEmployeeRels(employees);
+        group.setGroupCostRels(costs);
+
+        return groupRepository.save(group);
     }
 
     @Transactional
@@ -162,10 +162,25 @@ public class GroupService {
         List<GroupEmployeeRel> employees = groupEmpMapper.toEntities(dto.getEmployeeData(), group);
         List<GroupCostRel> costs = groupCostMapper.toEntities(dto.getCostData(), group);
 
+        if (duplicatedEmployee(employees)) {
+            throw new Exception("Duplicated employee!");
+        }
+
         group.setGroupCostRels(costs);
         group.setGroupEmployeeRels(employees);
 
         return groupRepository.save(group);
+    }
+
+    private boolean duplicatedEmployee(List<GroupEmployeeRel> employees) {
+        Set<Long> employeeSet = new HashSet<>();
+        for (GroupEmployeeRel employeeRel : employees) {
+            if (employeeSet.contains(employeeRel.getEmployee().getId())) {
+                return true;
+            }
+            employeeSet.add(employeeRel.getEmployee().getId());
+        }
+        return false;
     }
 
     public void delete(Long id) {
